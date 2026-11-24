@@ -38,14 +38,14 @@
     brand.href = "#dashboard";
     brand.setAttribute("aria-label", "Big Think Capital Renewals HQ, go to Dashboard");
     brand.innerHTML =
-      '<img class="rph-logo" alt="Big Think Capital" src="/brand/logo.svg">' +
+      '<img class="rph-logo" alt="Big Think Capital" src="/brand/logo.png">' +
       '<span class="rph-wordmark" aria-hidden="true">BIG THINK<b>CAPITAL</b></span>' +
       '<span class="rph-divider" aria-hidden="true"></span>' +
       '<span class="rph-product">Renewals HQ</span>';
     const img = brand.querySelector("img");
     img.addEventListener("error", function onErr() {
       // Try a PNG next, then fall back to the text wordmark.
-      if (img.src.endsWith(".svg")) { img.src = "/brand/logo.png"; return; }
+      
       img.removeEventListener("error", onErr);
       img.remove();
       brand.classList.add("no-logo");
