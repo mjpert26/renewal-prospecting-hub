@@ -114,7 +114,7 @@ The prototype's "Viewing as" selector is locked to the signed-in Salesforce user
 
 ### Known limitations
 
-- **Book lock:** book scoping is still built into the queries the page sends. Queries run as the viewer, so a user can never see records Salesforce does not already share with them, but a technically skilled rep could send a query without the book filter. For strict enforcement, restrict record visibility in Salesforce (sharing rules) or move query construction server-side.
+- **Record visibility:** Salesforce sharing is the security boundary. Every query runs as the signed-in user, so the app can never return a record that user cannot already see in Salesforce. Organization-wide defaults for Account, Opportunity and Lead are Private, and no renewal profile has View All Data, so visibility is determined by role hierarchy and sharing rules. The page's book filter only narrows results further for convenience. To change what a rep can see, change Salesforce sharing rules, not the app.
 - **Safari inside Salesforce:** the embedded (Canvas) view relies on partitioned third-party cookies, which Chrome and Edge support. Safari users should use the standalone link.
 - **Storage refresh:** saved lists and Hitlists refresh every 20 seconds and immediately after the viewer's own changes, rather than in real time.
 
