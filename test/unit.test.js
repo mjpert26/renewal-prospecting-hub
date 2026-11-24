@@ -81,3 +81,18 @@ test("page builder injects runtime and ready gate", async () => {
   assert.ok(out.includes('<script src="/rph-theme.js"></script>'));
   assert.ok(out.indexOf('href="/rph-theme.css"') > out.lastIndexOf("</style>"));
 });
+
+test("theme never overrides eligibility row shading", async () => {
+  const fs = await import("node:fs");
+  const page = fs.readFileSync(new URL("../app/index.html", import.meta.url), "utf8");
+  for (const c of ["row-green", "row-yellow", "row-red"]) assert.ok(page.includes(`tr.${c} td{background`), `page still defines ${c}`);
+  for (const f of ["rph-theme.css", "rph-fx.css"]) {
+    const css = fs.readFileSync(new URL(`../public/${f}`, import.meta.url), "utf8").replace(/\/\*[\s\S]*?\*\//g, "");
+    // Any rule that sets a td background on table rows must exclude the eligibility classes.
+    for (const rule of css.match(/[^{}]*\btr\b[^{}]*\btd\b[^{}]*\{[^}]*background[^}]*\}/g) || []) {
+      const sel = rule.slice(0, rule.indexOf("{"));
+      if (/tr\.tot/.test(sel)) continue;
+      assert.ok(/:not\(\[class\*="row-"\]\)/.test(sel), `${f}: "${sel.trim()}" could paint over eligibility colours`);
+    }
+  }
+});

@@ -151,7 +151,9 @@ html.rph-theme th {
   font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.07em; color: #6b7686;
 }
 html.rph-theme tbody tr { transition: background-color 0.12s; }
-html.rph-theme tbody tr:hover td { background: #f5f9ff; }
+/* Eligibility shading (tr.row-green / row-yellow / row-red) is owned by the page and must keep its colours,
+   including on hover. Only unshaded rows get the theme's hover tint. */
+html.rph-theme tbody tr:not([class*="row-"]):hover td { background: #f5f9ff; }
 html.rph-theme tbody tr:hover td:first-child { box-shadow: inset 3px 0 0 #1068a8; }
 html.rph-theme tr.tot td { background: linear-gradient(90deg, #f1f5fa, #f7f9fc); border-top: 1px solid #e3e7ee; }
 
