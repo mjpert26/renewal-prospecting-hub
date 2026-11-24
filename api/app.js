@@ -8,7 +8,7 @@ const INIT_LINE = "renderLists(); initLists(); updateCounts(); header(); showVie
 let cached = null;
 
 export function buildPage(html) {
-  const runtime = '<script src="/rph-runtime.js"></script>\n<script src="/rph-theme.js"></script>\n<script src="/rph-fx.js"></script>\n';
+  const runtime = '<script src="/rph-runtime.js"></script>\n<script src="/rph-theme.js"></script>\n<script src="/rph-fx.js"></script>\n<script src="/rph-grid.js"></script>\n';
   const tag = runtime + '<script>\n(function(){\n"use strict";';
   let out = html.replace('<script>\n(function(){\n"use strict";', tag);
   if (out === html) out = html.replace("<script>", runtime + "<script>");

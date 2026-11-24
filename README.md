@@ -98,7 +98,8 @@ Because the artifact file is unchanged, a new version exported from claude.ai ca
 - **Header:** Big Think Capital logo, "Renewals HQ" title, icon pill navigation with a sliding active indicator, and an account menu (name, email, Open Salesforce, Sign out). Managers find the "Viewing as" picker inside the account menu; reps do not see it.
 - **Logo:** `public/brand/logo.png` is the Big Think Capital logo with white lettering for the dark header. `logo-color.png` is the original colour version and `mark.png` (the "b" mark) is the favicon. If the logo file is missing, a text wordmark is shown.
 - **Collapsible filter sidebar:** collapses to a narrow rail with Expand and Run buttons.
-- **Row size:** Compact, Default and Comfortable row heights, available on every table toolbar.
+- **Row size:** Compact, Default and Comfortable presets on every table toolbar.
+- **Spreadsheet-style resizing (`public/rph-grid.js`):** drag the right edge of a column header to change that column's width, or drag the bottom edge of any row to change the height of every row in that table. Double-click an edge to reset it. Clicking a Row size preset clears a dragged row height. The command palette has "Reset column widths and row heights". Sizes are remembered per browser. Applies to the Prospecting, Closing, Hitlist and dashboard tables.
 - **Effects layer (`public/rph-fx.css`, `public/rph-fx.js`):** animated header and dashboard banner backgrounds, cursor-following highlight on dashboard cards, count-up animation for dashboard figures, shimmering month-pace bar, polished buttons and tables, gold, silver and bronze leaderboard ranks, page transitions, and a command palette (Ctrl+K or Cmd+K) for jumping to pages, quick starts and view settings. All motion is disabled when the operating system's reduce-motion setting is on.
 - Sidebar state and row size are remembered per browser (local storage) and are not shared or stored on the server.
 
@@ -219,6 +220,7 @@ app/capabilities.json   Original claude.ai capability declaration (reference for
 public/rph-runtime.js   Browser adapter that replaces the claude.ai runtime
 public/rph-theme.*      Renewals HQ theme layer (header, navigation, sidebar, row size)
 public/rph-fx.*         Renewals HQ effects layer (animations, command palette)
+public/rph-grid.js      Column and row resizing for tables
 public/brand/           Logo files
 api/                    Vercel serverless functions (auth, Canvas, SOQL proxy, storage)
 lib/                    Session, Salesforce and storage helpers

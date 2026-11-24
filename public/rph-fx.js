@@ -105,6 +105,7 @@
     [["compact", "Compact"], ["default", "Default"], ["comfy", "Comfortable"]].forEach(([k, l]) => {
       list.push({ group: "View", label: "Row size: " + l, icon: ICON.rows, run: () => { const b = document.querySelector('.rph-density button[data-d="' + k + '"]'); if (b) b.click(); } });
     });
+    if (window.__rphGrid) list.push({ group: "View", label: "Reset column widths and row heights", icon: ICON.rows, run: () => window.__rphGrid.reset() });
     list.push({ group: "Links", label: "Open Salesforce", icon: ICON.ext, run: () => window.open("https://bigthink.lightning.force.com/lightning/page/home", "_blank", "noopener") });
     return list;
   }

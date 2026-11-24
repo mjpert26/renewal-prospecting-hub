@@ -174,3 +174,19 @@ html.rph-theme tr:nth-child(3) > td .rk { background: linear-gradient(135deg, #f
   .rph-enter, .rph-cmd, .rph-cmd-panel { animation: none; }
   html.rph-theme .kpi:hover { transform: none; }
 }
+
+/* ---------- spreadsheet-style resizing (rph-grid.js) ---------- */
+.rph-cell { display: block; }
+.rph-col-grip {
+  position: absolute; top: 0; right: -3px; bottom: 0; width: 7px; z-index: 2;
+  cursor: col-resize; touch-action: none;
+}
+.rph-col-grip::after {
+  content: ""; position: absolute; top: 25%; bottom: 25%; left: 3px; width: 1px;
+  background: rgb(15 39 66 / 0.14); transition: background-color 0.15s, top 0.15s, bottom 0.15s;
+}
+th:hover > .rph-col-grip::after { background: rgb(15 39 66 / 0.3); }
+.rph-col-grip:hover::after, html.rph-resizing-col .rph-col-grip:active::after { top: 0; bottom: 0; width: 2px; left: 2px; background: #1068a8; }
+html.rph-row-edge tbody td, html.rph-resizing-row, html.rph-resizing-row * { cursor: row-resize !important; }
+html.rph-resizing-col, html.rph-resizing-col * { cursor: col-resize !important; }
+html.rph-resizing-row, html.rph-resizing-col { user-select: none; -webkit-user-select: none; }
