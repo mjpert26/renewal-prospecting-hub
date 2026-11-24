@@ -78,4 +78,6 @@ test("page builder injects runtime and ready gate", async () => {
   const out = buildPage(fs.readFileSync(new URL("../app/index.html", import.meta.url), "utf8"));
   assert.ok(out.includes('<script src="/rph-runtime.js"></script>'));
   assert.ok(out.includes("window.__rphReady||Promise.resolve()"));
+  assert.ok(out.includes('<script src="/rph-theme.js"></script>'));
+  assert.ok(out.indexOf('href="/rph-theme.css"') > out.lastIndexOf("</style>"));
 });

@@ -8,9 +8,12 @@ const INIT_LINE = "renderLists(); initLists(); updateCounts(); header(); showVie
 let cached = null;
 
 export function buildPage(html) {
-  const tag = '<script src="/rph-runtime.js"></script>\n<script>\n(function(){\n"use strict";';
+  const runtime = '<script src="/rph-runtime.js"></script>\n<script src="/rph-theme.js"></script>\n';
+  const tag = runtime + '<script>\n(function(){\n"use strict";';
   let out = html.replace('<script>\n(function(){\n"use strict";', tag);
-  if (out === html) out = html.replace("<script>", '<script src="/rph-runtime.js"></script>\n<script>');
+  if (out === html) out = html.replace("<script>", runtime + "<script>");
+  // Theme layer loads after the page's own styles so it can override them.
+  out = out.replace("</head>", '<link rel="stylesheet" href="/rph-theme.css">\n</head>');
   // Wait for the signed-in user to be known before the page runs its first query.
   out = out.replace(INIT_LINE, `(window.__rphReady||Promise.resolve()).then(function(){ ${INIT_LINE} });`);
   return out;

@@ -1,0 +1,294 @@
+/*
+ * Renewals HQ theme layer.
+ * Loaded after the page's own styles. Restyles the header and navigation without changing
+ * app/index.html. Patterns adapted from React Bits Pro app-shell-1 (sidebar nav, account menu)
+ * and navigation-1 (animated top navigation), reimplemented in plain CSS.
+ */
+:root {
+  --hq-ink: #0a1a2f;
+  --hq-ink-2: #10284a;
+  --hq-line: rgb(255 255 255 / 0.09);
+  --hq-text: rgb(255 255 255 / 0.92);
+  --hq-text-2: rgb(255 255 255 / 0.66);
+  --hq-gold: #f2c14e;
+  --hq-ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- header shell ---------- */
+html.rph-theme header {
+  position: relative;
+  z-index: 50;
+  background:
+    radial-gradient(1200px 120px at 20% -40px, rgb(64 132 255 / 0.18), transparent 70%),
+    linear-gradient(180deg, var(--hq-ink-2), var(--hq-ink));
+  border-bottom: 1px solid var(--hq-line);
+  box-shadow: 0 1px 0 rgb(0 0 0 / 0.25), 0 8px 24px -16px rgb(0 0 0 / 0.6);
+  padding: 10px 20px;
+  gap: 18px;
+  flex-wrap: nowrap;
+  animation: hq-drop 0.45s var(--hq-ease) both;
+}
+html.rph-theme header > div:not(.viewas):not(.rph-user) { min-width: 0; }
+html.rph-theme header .sub {
+  color: var(--hq-text-2);
+  font-size: 11.5px;
+  padding-left: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  animation: hq-fade 0.35s var(--hq-ease) both;
+}
+
+@keyframes hq-drop { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+@keyframes hq-fade { from { opacity: 0; transform: translateY(-3px); } to { opacity: 1; transform: none; } }
+@keyframes hq-pop  { from { opacity: 0; transform: translateY(-6px) scale(0.98); } to { opacity: 1; transform: none; } }
+
+/* ---------- brand ---------- */
+.rph-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  color: #fff;
+  text-decoration: none;
+}
+.rph-logo { height: 30px; width: auto; display: block; }
+.rph-wordmark {
+  display: none;
+  flex-direction: column;
+  line-height: 1;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--hq-text);
+}
+.rph-wordmark b { color: var(--hq-gold); font-weight: 800; margin-top: 3px; }
+.rph-brand.no-logo .rph-wordmark { display: flex; }
+.rph-divider { width: 1px; height: 26px; background: var(--hq-line); }
+.rph-product { font-size: 15px; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap; }
+
+/* ---------- segmented pill navigation with sliding indicator ---------- */
+html.rph-theme .topnav {
+  position: relative;
+  display: inline-flex;
+  gap: 2px;
+  padding: 4px;
+  margin-bottom: 5px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.05);
+  border: 1px solid var(--hq-line);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04);
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+html.rph-theme .topnav::-webkit-scrollbar { display: none; }
+html.rph-theme .topnav button,
+html.rph-theme .topnav button:first-child {
+  position: relative;
+  z-index: 1;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--hq-text-2);
+  background: transparent;
+  white-space: nowrap;
+  transition: color 0.2s var(--hq-ease), background-color 0.2s var(--hq-ease);
+}
+html.rph-theme .topnav button:not(.on):hover { color: #fff; background: rgb(255 255 255 / 0.06); }
+html.rph-theme .topnav button.on,
+html.rph-theme .topnav button.on:not(:first-child) { color: #fff; background: transparent; }
+html.rph-theme .topnav button:focus-visible { outline: 2px solid var(--hq-gold); outline-offset: 1px; }
+.rph-ind {
+  position: absolute;
+  z-index: 0;
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.18), rgb(255 255 255 / 0.1));
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.2), 0 4px 14px -6px rgb(0 0 0 / 0.6);
+  transition: transform 0.35s var(--hq-ease), width 0.35s var(--hq-ease), opacity 0.2s;
+  pointer-events: none;
+}
+.rph-ico { display: inline-flex; width: 15px; height: 15px; opacity: 0.85; }
+.rph-ico svg { width: 15px; height: 15px; }
+html.rph-theme .topnav .cnt {
+  background: var(--hq-gold);
+  color: #2b1d00;
+  font-weight: 700;
+  font-size: 10.5px;
+  padding: 1px 7px;
+  min-width: 18px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- "Viewing as" (managers, inside the account menu) ---------- */
+html.rph-theme.rph-rep .viewas { display: none; }
+.rph-menu-sec { padding: 8px 10px 10px; border-bottom: 1px solid #edf0f4; margin-bottom: 4px; }
+html.rph-theme .rph-menu .viewas {
+  display: flex; flex-direction: column; align-items: stretch; gap: 6px;
+  background: none; border: 0; padding: 0; border-radius: 0;
+}
+html.rph-theme .rph-menu .viewas label { display: block; color: #6b7686; font-size: 10.5px; letter-spacing: 0.08em; }
+html.rph-theme .rph-menu .viewas select {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; max-width: none;
+  background-color: #f5f7fa; color: #1b2430;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b7686'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 12px center;
+  border: 1px solid #e3e7ee; border-radius: 8px; padding: 8px 30px 8px 10px; font-size: 13px;
+}
+.rph-menu-sec + a, .rph-menu-head + a { margin-top: 2px; }
+
+/* ---------- account menu ---------- */
+.rph-user { position: relative; flex-shrink: 0; }
+.rph-user-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px 4px 4px;
+  border-radius: 999px;
+  border: 1px solid var(--hq-line);
+  background: rgb(255 255 255 / 0.04);
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+  transition: background-color 0.15s var(--hq-ease);
+}
+.rph-user-btn:hover, .rph-user-btn[aria-expanded="true"] { background: rgb(255 255 255 / 0.1); }
+.rph-user-btn:focus-visible { outline: 2px solid var(--hq-gold); outline-offset: 2px; }
+.rph-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #2b1d00;
+  background: linear-gradient(135deg, #ffd978, var(--hq-gold));
+  box-shadow: inset 0 0 0 1px rgb(0 0 0 / 0.1);
+}
+.rph-user-meta { display: flex; flex-direction: column; text-align: left; line-height: 1.15; }
+.rph-user-name { font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.rph-user-role { font-size: 11px; color: var(--hq-text-2); }
+.rph-chev { width: 14px; height: 14px; opacity: 0.7; transition: transform 0.2s var(--hq-ease); }
+.rph-user-btn[aria-expanded="true"] .rph-chev { transform: rotate(180deg); }
+
+.rph-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  min-width: 240px;
+  width: max-content;
+  max-width: min(340px, calc(100vw - 24px));
+  padding: 6px;
+  border-radius: 14px;
+  background: #fff;
+  color: #1b2430;
+  border: 1px solid rgb(15 39 66 / 0.1);
+  box-shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 16px 36px -12px rgb(10 26 47 / 0.35);
+  animation: hq-pop 0.18s var(--hq-ease) both;
+}
+.rph-menu[hidden] { display: none; }
+.rph-menu-head { padding: 10px 10px 8px; border-bottom: 1px solid #edf0f4; margin-bottom: 4px; }
+.rph-menu-head b { display: block; font-size: 13px; }
+.rph-menu-head span { font-size: 12px; color: #6b7686; word-break: break-all; }
+.rph-menu a, .rph-menu button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+}
+.rph-menu a:hover, .rph-menu a:focus-visible, .rph-menu button:hover, .rph-menu button:focus-visible {
+  background: #f2f5f9;
+  outline: none;
+}
+.rph-menu svg { width: 16px; height: 16px; color: #6b7686; flex-shrink: 0; }
+
+/* ---------- small polish to match ---------- */
+html.rph-theme .tab.on { background: var(--hq-ink-2); border-color: var(--hq-ink-2); }
+html.rph-theme .pill-f.on { background: var(--hq-ink-2); border-color: var(--hq-ink-2); }
+
+/* ---------- narrow screens ---------- */
+@media (max-width: 1180px) {
+  .rph-user-meta, .rph-divider, .rph-product { display: none; }
+}
+@media (max-width: 760px) {
+  html.rph-theme header { flex-wrap: wrap; padding: 10px 16px; row-gap: 10px; }
+  html.rph-theme header .sub { display: none !important; }
+  html.rph-theme header .spacer { display: none; }
+  .rph-brand { order: 1; }
+  .rph-user { order: 2; margin-left: auto; }
+  html.rph-theme header > div:not(.viewas):not(.rph-user) { order: 3; flex-basis: 100%; }
+  html.rph-theme .topnav { display: flex; margin-bottom: 0; }
+  .rph-product, .rph-divider { display: inline; }
+  .rph-divider { display: block; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.rph-theme header, html.rph-theme header .sub, .rph-menu { animation: none; }
+  .rph-ind { transition: none; }
+}
+
+/* ---------- collapsible filter sidebar ---------- */
+html.rph-theme aside.rph-side { transition: width 0.28s var(--hq-ease), min-width 0.28s var(--hq-ease); position: relative; overflow: hidden; }
+.rph-side-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 10px 8px 16px; border-bottom: 1px solid var(--line, #e3e7ee); background: #fff; flex-shrink: 0;
+}
+.rph-side-title { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13px; color: #1b2430; }
+.rph-side-title svg { width: 15px; height: 15px; color: #6b7686; }
+.rph-iconbtn {
+  display: inline-grid; place-items: center; width: 30px; height: 30px; padding: 0;
+  border: 1px solid transparent; border-radius: 8px; background: transparent; color: #4a5566; cursor: pointer;
+  transition: background-color 0.15s var(--hq-ease), color 0.15s var(--hq-ease);
+}
+.rph-iconbtn:hover { background: #f0f3f7; color: #1b2430; }
+.rph-iconbtn:focus-visible { outline: 2px solid var(--accent, #1f6feb); outline-offset: 1px; }
+.rph-iconbtn svg { width: 17px; height: 17px; }
+.rph-rail { display: none; flex-direction: column; align-items: center; gap: 6px; padding: 10px 0; height: 100%; }
+.rph-run { color: #fff; background: var(--hq-ink-2); }
+.rph-run:hover { color: #fff; background: var(--hq-ink); }
+.rph-rail-label {
+  writing-mode: vertical-rl; transform: rotate(180deg); margin-top: 8px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: #6b7686; cursor: pointer;
+}
+html.rph-side-collapsed aside.rph-side { width: 48px; min-width: 48px; }
+html.rph-side-collapsed aside.rph-side > :not(.rph-rail) { display: none; }
+html.rph-side-collapsed .rph-rail { display: flex; }
+
+/* ---------- row density ---------- */
+.rph-density {
+  display: inline-flex; align-items: center; gap: 2px; padding: 3px;
+  border: 1px solid var(--line, #e3e7ee); border-radius: 9px; background: #f7f9fc;
+}
+.rph-density-label { font-size: 11px; color: #6b7686; padding: 0 6px 0 4px; }
+.rph-density button {
+  display: inline-grid; place-items: center; width: 28px; height: 24px; padding: 0;
+  border: 0; border-radius: 6px; background: transparent; color: #6b7686; cursor: pointer;
+}
+.rph-density button svg { width: 15px; height: 15px; }
+.rph-density button:hover { color: #1b2430; }
+.rph-density button[aria-pressed="true"] { background: #fff; color: #1b2430; box-shadow: 0 1px 2px rgb(0 0 0 / 0.12); }
+.rph-density button:focus-visible { outline: 2px solid var(--accent, #1f6feb); outline-offset: 1px; }
+.rph-density .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+html.rph-density-compact td { padding-top: 3px; padding-bottom: 3px; font-size: 12px; }
+html.rph-density-compact th { padding-top: 6px; padding-bottom: 6px; }
+html.rph-density-compact td.note { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 320px; }
+html.rph-density-comfy td { padding-top: 13px; padding-bottom: 13px; font-size: 13.5px; }
+html.rph-density-comfy th { padding-top: 12px; padding-bottom: 12px; }
+@media (prefers-reduced-motion: reduce) { html.rph-theme aside.rph-side { transition: none; } }

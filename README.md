@@ -91,6 +91,16 @@ The application is deployed on Vercel. It reads Salesforce directly through the 
 
 Because the artifact file is unchanged, a new version exported from claude.ai can be dropped into `app/index.html` and redeployed.
 
+### Theme layer (Renewals HQ)
+
+`public/rph-theme.css` and `public/rph-theme.js` restyle the page without changing `app/index.html`. They are injected by `api/app.js` after the page's own styles and scripts. Patterns are adapted from React Bits Pro (`app-shell-1`, `navigation-1`, `app-sidebar`, `data-table`) and reimplemented in plain CSS and JavaScript, because the page has no React build step.
+
+- **Header:** Big Think Capital logo, "Renewals HQ" title, icon pill navigation with a sliding active indicator, and an account menu (name, email, Open Salesforce, Sign out). Managers find the "Viewing as" picker inside the account menu; reps do not see it.
+- **Logo:** place the logo at `public/brand/logo.svg` (or `public/brand/logo.png`), sized for a dark background. Until a file is present, a text wordmark is shown.
+- **Collapsible filter sidebar:** collapses to a narrow rail with Expand and Run buttons.
+- **Row size:** Compact, Default and Comfortable row heights, available on every table toolbar.
+- Sidebar state and row size are remembered per browser (local storage) and are not shared or stored on the server.
+
 ### Sign-in
 
 - **Standalone link:** visiting the site redirects to Salesforce login (OAuth 2.0 web server flow with PKCE). Tokens are kept in an encrypted, HttpOnly session cookie (12 hours) and are never exposed to page scripts. Access tokens are refreshed automatically when a refresh token is available.
@@ -206,6 +216,8 @@ Requirements carried over from the prototype:
 app/index.html          The application (original claude.ai artifact, unchanged)
 app/capabilities.json   Original claude.ai capability declaration (reference for access rules)
 public/rph-runtime.js   Browser adapter that replaces the claude.ai runtime
+public/rph-theme.*      Renewals HQ theme layer (header, navigation, sidebar, row size)
+public/brand/           Logo files
 api/                    Vercel serverless functions (auth, Canvas, SOQL proxy, storage)
 lib/                    Session, Salesforce and storage helpers
 test/                   Unit tests

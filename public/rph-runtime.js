@@ -121,6 +121,7 @@
   const db = { collection, doc };
 
   const caps = { mcp, db, user };
+  window.__rphMe = meP; // used by rph-theme.js for the account menu
   window.claude = {
     use: (name) => meP.then(() => caps[name] || null, () => null),
   };
@@ -134,7 +135,6 @@
       const book = document.getElementById("book");
       const proto = document.querySelector(".proto");
       if (proto) proto.remove();
-      addSignOut(m);
       if (!sel) return;
       const onRoster = Array.from(sel.options).some((o) => o.value === m.name);
       if (m.manager) {
@@ -158,16 +158,6 @@
     },
     () => new Promise(() => {}) // not signed in: signIn() already redirected
   );
-
-  function addSignOut(m) {
-    const host = document.querySelector(".viewas");
-    if (!host || m.canvas) return;
-    const a = document.createElement("a");
-    a.href = "/api/auth/logout";
-    a.textContent = "Sign out";
-    a.style.cssText = "margin-left:12px;font-size:12px;color:inherit;opacity:.75;white-space:nowrap";
-    host.appendChild(a);
-  }
 
   function escapeHtml(s) {
     return String(s || "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
