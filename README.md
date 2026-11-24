@@ -115,27 +115,35 @@ The prototype's "Viewing as" selector is locked to the signed-in Salesforce user
 ### Known limitations
 
 - **Record visibility:** Salesforce sharing is the security boundary. Every query runs as the signed-in user, so the app can never return a record that user cannot already see in Salesforce. Organization-wide defaults for Account, Opportunity and Lead are Private, and no renewal profile has View All Data, so visibility is determined by role hierarchy and sharing rules. The page's book filter only narrows results further for convenience. To change what a rep can see, change Salesforce sharing rules, not the app.
-- **Safari inside Salesforce:** the embedded (Canvas) view relies on partitioned third-party cookies, which Chrome and Edge support. Safari users should use the standalone link.
+- **Safari inside Salesforce:** the embedded Renewals HQ tab relies on partitioned third-party cookies, which Chrome and Edge support. Safari users should use the standalone link.
 - **Storage refresh:** saved lists and Hitlists refresh every 20 seconds and immediately after the viewer's own changes, rather than in real time.
 
 ## Deployment
 
-### 1. Salesforce Connected App (Salesforce admin)
+### 1. Salesforce External Client App (Salesforce admin)
 
-Setup → App Manager → New Connected App:
+The production org uses an External Client App named **Renewal Prospecting Hub**.
 
-1. **API (Enable OAuth Settings):** enabled.
-   - Callback URL: `https://<your-domain>/api/auth/callback`
-   - Selected OAuth scopes: `Access and manage your data (api)`, `Perform requests at any time (refresh_token, offline_access)`, `Access unique user identifiers (openid)`.
-   - Require Proof Key for Code Exchange (PKCE): enabled.
-2. **Canvas App Settings:** enabled.
-   - Canvas App URL: `https://<your-domain>/api/canvas`
+Setup → External Client App Manager → Renewal Prospecting Hub:
+
+1. **Settings → OAuth:** enabled.
+   - Callback URL: `https://renewal-prospecting-hub.vercel.app/api/auth/callback`
+   - OAuth scopes: `api`, `refresh_token offline_access`, `openid`.
+   - Require PKCE, require secret for the Web Server flow and for the Refresh Token flow.
+2. **Settings → Canvas:** enabled.
+   - Canvas App URL: `https://renewal-prospecting-hub.vercel.app/api/canvas`
    - Access Method: `Signed Request (POST)`
-   - Locations: `Lightning Component` and `Visualforce Page` (or `Chatter Tab` if a tab is preferred).
-3. After saving: Manage → Edit Policies → Permitted Users: `Admin approved users are pre-authorized`. Assign the renewal team's profile or a permission set.
-4. Copy the Consumer Key and Consumer Secret for the Vercel environment variables.
+   - Locations: `Lightning Component`, `Visualforce Page`.
+3. **Policies → OAuth Policies:** Permitted Users = `Admin approved users are pre-authorized`. Selected permission set: **Renewal Prospecting Hub Access** (`Renewal_Prospecting_Hub_Access`).
+4. Copy the Consumer Key and Consumer Secret into the Vercel environment variables.
 
-To show the app inside Salesforce, add it to a Lightning page with the standard **Canvas App** component, or create a Visualforce page containing `<apex:canvasApp developerName="Renewal_Prospecting_Hub" width="100%" height="1200px"/>` and expose it as a Visualforce tab.
+**Access:** users must be assigned the `Renewal_Prospecting_Hub_Access` permission set. It is assigned to all active users whose profile name contains "Renewal" and to the system administrator. New renewal hires must be assigned it manually:
+
+```bash
+sf org assign permset -o prod -n Renewal_Prospecting_Hub_Access -b <username>
+```
+
+**Salesforce tab (Renewals HQ):** a Lightning App Page named **Renewals HQ** (one region) contains the standard Canvas App component pointing at the app's API name, height 1400 px, border hidden. It is activated as a Lightning tab in the Renewals Lightning app and made visible through the renewal profiles or the permission set.
 
 ### 2. Vercel
 
