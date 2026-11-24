@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Renewal Prospecting Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#0f2742; --navy-2:#173a61; --accent:#1f6feb; --accent-soft:#e8f0fe;
+    --bg:#f4f6f9; --panel:#ffffff; --line:#e3e7ee; --text:#1b2430; --muted:#6b7686;
+    --good:#137a3e; --good-soft:#e5f5eb; --warn:#9a5b00; --warn-soft:#fff3dc; --bad:#b42318; --bad-soft:#fdecea;
+    --radius:10px;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;font-size:13px;color:var(--text);background:var(--bg);display:flex;flex-direction:column}
+  header{background:var(--navy);color:#fff;padding:12px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  header h1{font-size:17px;margin:0;font-weight:700;letter-spacing:.2px}
+  header .sub{color:#b9c6d8;font-size:12px}
+  header .spacer{flex:1}
+  .viewas{display:flex;align-items:center;gap:8px;background:var(--navy-2);padding:6px 10px;border-radius:8px}
+  .viewas label{color:#b9c6d8;font-size:11px;text-transform:uppercase;letter-spacing:.6px}
+  .viewas select{background:#fff;border:0;border-radius:6px;padding:5px 8px;font:inherit}
+  .proto{font-size:11px;background:#ffd36b;color:#3a2a00;padding:3px 8px;border-radius:20px;font-weight:600}
+  main{flex:1;display:flex;min-height:0}
+  aside{width:330px;min-width:330px;background:var(--panel);border-right:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+  .aside-scroll{overflow:auto;flex:1;padding:12px 14px 20px}
+  .aside-foot{border-top:1px solid var(--line);padding:10px 14px;display:flex;gap:8px;background:#fafbfc}
+  select.qs{padding:9px 32px 9px 10px;font-weight:600;border-radius:8px;appearance:none;-webkit-appearance:none;cursor:pointer;
+    background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%236b7686'/%3E%3C/svg%3E") no-repeat right 12px center}
+  .sec-title{font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);font-weight:600;margin:14px 0 6px}
+  details{border:1px solid var(--line);border-radius:var(--radius);margin-bottom:8px;background:#fff}
+  summary{cursor:pointer;padding:9px 12px;font-weight:600;list-style:none;display:flex;align-items:center;gap:8px}
+  summary::-webkit-details-marker{display:none}
+  summary::before{content:"▸";color:var(--muted);font-size:11px;transition:transform .15s}
+  details[open] summary::before{transform:rotate(90deg)}
+  summary .count{margin-left:auto;background:var(--accent-soft);color:var(--accent);border-radius:10px;padding:1px 7px;font-size:11px;display:none}
+  summary .count.show{display:inline-block}
+  .grp{padding:4px 12px 12px;display:grid;gap:10px}
+  .f label.t{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;font-weight:500}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .row3{display:grid;grid-template-columns:1.3fr 1fr;gap:6px}
+  input[type=text],input[type=number],input[type=date],select{width:100%;border:1px solid var(--line);border-radius:7px;padding:6px 8px;font:inherit;background:#fff;color:var(--text)}
+  input:focus,select:focus{outline:2px solid var(--accent-soft);border-color:var(--accent)}
+  .checks{display:flex;flex-wrap:wrap;gap:6px}
+  .checks label{display:flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:7px;padding:4px 8px;cursor:pointer;font-size:12px;user-select:none}
+  .checks label:has(input:checked){background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+  .checks input{margin:0}
+  .stagebox{max-height:170px;overflow:auto;border:1px solid var(--line);border-radius:7px;padding:6px;display:grid;gap:3px}
+  .stagebox label{display:flex;gap:6px;align-items:center;font-size:12px;cursor:pointer}
+  .hint{font-size:11px;color:var(--muted)}
+  .btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:8px 12px;font:inherit;font-weight:600;cursor:pointer;color:var(--text)}
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;flex:1}
+  .btn.primary:hover{background:#1858c4;color:#fff}
+  .btn:disabled{opacity:.55;cursor:default}
+  section.results{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0}
+  .toolbar{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--panel);flex-wrap:wrap}
+  .stat{display:flex;flex-direction:column}
+  .stat b{font-size:18px}
+  .stat span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+  .divider{width:1px;align-self:stretch;background:var(--line)}
+  .search{min-width:220px;max-width:300px}
+  .status{font-size:12px;color:var(--muted)}
+  .banner{margin:10px 16px 0;padding:10px 12px;border-radius:8px;font-size:12px;display:none}
+  .banner.show{display:block}
+  .banner.err{background:var(--bad-soft);color:var(--bad)}
+  .banner.info{background:var(--warn-soft);color:var(--warn)}
+  .tablewrap{flex:1;overflow:auto;margin:10px 16px 16px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius)}
+  table{border-collapse:separate;border-spacing:0;width:100%;min-width:1350px}
+  th{position:sticky;top:0;background:#f7f9fc;text-align:left;font-weight:600;font-size:12px;color:#3d4a5c;padding:9px 10px;border-bottom:1px solid var(--line);cursor:pointer;white-space:nowrap;user-select:none;z-index:1}
+  th .arr{color:var(--accent);margin-left:4px}
+  td{padding:8px 10px;border-bottom:1px solid #eef1f5;vertical-align:top;white-space:nowrap}
+  tr:hover td{background:#fafcff}
+  tr.row-green td{background:#eaf7ef} tr.row-green:hover td{background:#dff2e6}
+  tr.row-yellow td{background:#fff8e1} tr.row-yellow:hover td{background:#fff2c9}
+  tr.row-red td{background:#fdeeee} tr.row-red:hover td{background:#fbe2e2}
+  .pill.el-green{background:#cdeedb;color:#0e6b35}.pill.el-yellow{background:#ffe9a8;color:#7a5200}.pill.el-red{background:#f9d3d0;color:#a1281d}.pill.el-none{background:#eceff3;color:#4a5566}
+  td.num{text-align:right;font-variant-numeric:tabular-nums}
+  th.num{text-align:right}
+  td.note{white-space:normal;min-width:240px;max-width:380px;color:#3d4a5c}
+  .acct{font-weight:600}
+  .acct a{color:var(--accent);text-decoration:none}
+  .acct a:hover{text-decoration:underline}
+  .acct small{display:block;font-weight:400;color:var(--muted);font-size:11px;margin-top:2px}
+  .pill{display:inline-block;font-size:11px;border-radius:10px;padding:1px 8px;font-weight:600;white-space:nowrap}
+  .pill.b1{background:#e8f0fe;color:#1a4fb4}.pill.b2{background:#efe7fd;color:#5b2fb1}.pill.house{background:#eceff3;color:#4a5566}
+  .pill.stage{background:#f1f3f6;color:#3d4a5c}
+  .pill.newer{background:var(--warn-soft);color:var(--warn)}
+  .epi{display:flex;align-items:center;gap:6px;justify-content:flex-end}
+  .bar{width:46px;height:6px;background:#edf0f4;border-radius:4px;overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--accent)}
+  .days{font-size:11px;color:var(--muted);display:block}
+  .days.hot{color:var(--good)} .days.cold{color:var(--bad)}
+  .empty{padding:60px 20px;text-align:center;color:var(--muted)}
+  .empty b{display:block;color:var(--text);font-size:15px;margin-bottom:6px}
+  .more{padding:12px;text-align:center}
+  .savedrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+  .saved{display:inline-flex;align-items:center;border:1px dashed var(--accent);border-radius:20px;font-size:12px;overflow:hidden}
+  .saved button{border:0;background:none;padding:4px 8px;font:inherit;font-size:12px;cursor:pointer;color:var(--accent)}
+  .saved button.x{color:var(--muted);padding-left:2px}
+  .listacts{display:flex;gap:14px;margin-top:6px;padding-left:2px}
+  .lnk{border:0;background:none;padding:0;font:inherit;font-size:12px;font-weight:600;color:var(--accent);cursor:pointer}
+  .lnk:hover{text-decoration:underline}
+  .lnk.danger{color:var(--bad)}
+  .tabsbar{display:flex;align-items:center;gap:6px;padding:10px 16px 0}
+  .tab{border:1px solid var(--line);background:#fff;border-radius:8px 8px 0 0;padding:7px 14px;font:inherit;font-weight:600;color:var(--muted);cursor:pointer}
+  .tab.on{background:var(--navy);border-color:var(--navy);color:#fff}
+  .tabsbar .hint{margin-left:8px}
+  .working{display:inline-block;margin-top:4px;font-size:11px;font-weight:600;border-radius:10px;padding:1px 8px;background:#ffedd5;color:#9a3412}
+  .working.me{background:#e0ecff;color:#1a4fb4}
+  tbody tr{cursor:pointer}
+  .scrim{position:fixed;inset:0;background:rgba(15,39,66,.25);opacity:0;pointer-events:none;transition:opacity .2s;z-index:6}
+  .scrim.show{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;bottom:0;width:520px;max-width:96vw;background:#fff;box-shadow:-12px 0 40px rgba(15,39,66,.18);transform:translateX(105%);transition:transform .22s cubic-bezier(.22,.61,.36,1);z-index:7;display:flex;flex-direction:column}
+  .drawer.show{transform:none}
+  .dhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:16px 18px;border-bottom:1px solid var(--line);background:#f7f9fc}
+  .dtitle{font-size:16px;font-weight:700}
+  .dtitle a{color:var(--accent);text-decoration:none}
+  .dbody{overflow:auto;padding:6px 18px 24px;flex:1}
+  .dsec{margin-top:16px}
+  .dsec h4{margin:0 0 8px;font-size:11px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted)}
+  .kv{display:grid;grid-template-columns:120px 1fr;gap:4px 10px;font-size:13px}
+  .kv dt{color:var(--muted)} .kv dd{margin:0}
+  .lastnote{background:#f7f9fc;border:1px solid var(--line);border-radius:8px;padding:10px 12px;white-space:pre-wrap}
+  .note{border-left:3px solid var(--line);padding:4px 0 8px 10px;margin-bottom:6px}
+  .note .meta{font-size:11px;color:var(--muted)}
+  .note .tt{font-weight:600}
+  .note .tx{white-space:pre-wrap;color:#3d4a5c}
+  .mini{width:100%;border-collapse:collapse;font-size:12px;min-width:0}
+  .mini th{position:static;background:#f7f9fc;padding:6px;font-size:11px;cursor:default}
+  .mini td{padding:6px;border-bottom:1px solid #eef1f5;white-space:nowrap}
+  .mini td.r,.mini th.r{text-align:right}
+  .sel{color:var(--good);font-weight:700}
+  .dload{color:var(--muted);padding:20px 0}
+  .topnav{display:flex;gap:4px;margin-bottom:3px}
+  .topnav button{background:none;border:0;color:#b9c6d8;font:inherit;font-size:16px;font-weight:700;padding:4px 10px;border-radius:7px;cursor:pointer;display:flex;align-items:center;gap:7px}
+  .topnav button:first-child{padding-left:0}
+  .topnav button.on{color:#fff}
+  .topnav button:not(.on):hover{color:#fff;background:var(--navy-2)}
+  .topnav button.on:not(:first-child){background:var(--navy-2)}
+  .topnav .cnt{background:#ffd36b;color:#3a2a00;border-radius:10px;font-size:11px;padding:1px 7px}
+  .hitview{flex:1;display:flex;flex-direction:column;min-height:0;min-width:0}
+  .pills{display:flex;flex-wrap:wrap;gap:6px;padding:12px 16px 2px}
+  .pill-f{border:1px solid var(--line);background:#fff;border-radius:20px;padding:4px 11px;font:inherit;font-size:12px;cursor:pointer;color:var(--text);display:inline-flex;gap:6px;align-items:center}
+  .pill-f b{font-weight:700}
+  .pill-f.on{border-color:var(--navy);background:var(--navy);color:#fff}
+  .pill-f.due{border-color:#f3c2bd;color:var(--bad)} .pill-f.due.on{background:var(--bad);border-color:var(--bad);color:#fff}
+  .hlbtn{border:1px solid var(--accent);background:#fff;color:var(--accent);border-radius:12px;font:inherit;font-size:11px;font-weight:600;padding:1px 8px;cursor:pointer;margin-top:4px}
+  .hlbtn:hover{background:var(--accent-soft)}
+  .hlbtn.on{border-color:#e6b800;background:#fff8db;color:#7a5a00;cursor:default}
+  .st{display:inline-block;border-radius:10px;padding:2px 8px;font-size:11px;font-weight:700;white-space:nowrap}
+  .st-1{background:#eceff3;color:#3d4a5c}.st-2{background:#e0ecff;color:#1a4fb4}.st-3{background:#e7e5ff;color:#4338ca}.st-4{background:#d9f3ef;color:#0f766e}
+  .st-5,.st-6{background:#f1e6ff;color:#6b21a8}.st-7{background:#fff1cf;color:#8a5a00}.st-8{background:#cdeedb;color:#0e6b35}.st-9{background:#d9f2fb;color:#0e6383}
+  .st-10,.st-11{background:#fbe0dd;color:#a1281d}.st-12{background:#2d3748;color:#fff}
+  select.stsel{border-radius:10px;padding:3px 6px;font-size:12px;font-weight:700;width:auto;border:1px solid transparent}
+  input.fu{width:132px;padding:4px 6px;font-size:12px}
+  input.fu.over{border-color:#f3a8a1;background:#fdeeee;color:var(--bad);font-weight:600}
+  input.fu.today{border-color:#f5d06a;background:#fff8e1;color:#7a5200;font-weight:600}
+  .chips{display:flex;flex-wrap:wrap;gap:4px}
+  .chip2{font-size:11px;border-radius:9px;padding:1px 7px;background:#f1f3f6;color:#3d4a5c;white-space:nowrap}
+  .tog{display:flex;flex-wrap:wrap;gap:6px}
+  .tog button{border:1px solid var(--line);background:#fff;border-radius:16px;padding:4px 10px;font:inherit;font-size:12px;cursor:pointer}
+  .tog button.on{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:600}
+  .ff{display:grid;gap:4px;margin-bottom:10px}
+  .ff label{font-size:12px;color:var(--muted);font-weight:500}
+  .ff textarea{width:100%;min-height:86px;border:1px solid var(--line);border-radius:7px;padding:8px;font:inherit;resize:vertical}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .logadd{display:flex;gap:6px;margin-bottom:8px}
+  .logadd input{flex:1}
+  .logx{border:0;background:none;color:var(--muted);cursor:pointer;font-size:12px;float:right}
+  .saved-ind{font-size:11px;color:var(--good)}
+  .addbox{position:relative}
+  .addbox input{width:240px}
+  .addres{position:absolute;right:0;top:36px;width:360px;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(15,39,66,.15);display:none;z-index:4;max-height:320px;overflow:auto}
+  .addres.show{display:block}
+  .addres div{padding:8px 12px;border-bottom:1px solid #eef1f5;cursor:pointer;font-size:13px}
+  .addres div:hover{background:#f7f9fc}
+  .addres small{display:block;color:var(--muted);font-size:11px}
+  .dangerlink{border:0;background:none;color:var(--bad);font:inherit;font-size:12px;font-weight:600;cursor:pointer;padding:0}
+  .hlhead{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .hlwho{display:flex;align-items:center;gap:8px;padding:12px 16px 0}
+  .hlwho label{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:600}
+  .hlwho select{width:auto;min-width:220px;font-weight:600}
+  tr.row-aging td{background:#fdeeee} tr.row-aging:hover td{background:#fbe2e2}
+  .aging{display:inline-block;margin-left:4px;font-size:11px;font-weight:700;border-radius:10px;padding:1px 7px;background:#f9d3d0;color:#a1281d}
+  .pill.cs{background:#e0ecff;color:#1a4fb4}
+  .dash .dscroll{overflow:auto;padding:16px 20px 28px;flex:1}
+  .dhero{display:flex;align-items:center;gap:24px;flex-wrap:wrap;background:linear-gradient(135deg,#0f2742,#075677);color:#fff;border-radius:14px;padding:18px 22px}
+  .dhello{font-size:20px;font-weight:700}
+  .dmonth{color:#b9d3e6;font-size:13px;margin-top:2px}
+  .dpace{flex:1;min-width:240px}
+  .dpace-l{display:flex;justify-content:space-between;font-size:12px;color:#d6e4ef;margin-bottom:6px}
+  .dpace-l .hint{color:#b9d3e6}
+  .dbar{height:8px;background:rgba(255,255,255,.18);border-radius:6px;overflow:hidden}
+  .dbar i{display:block;height:100%;background:#ffd36b;border-radius:6px;width:0;transition:width .4s}
+  .dhero .btn{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.3);color:#fff}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-top:14px}
+  .kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .kpi .l{font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:600}
+  .kpi .v{font-size:24px;font-weight:700;margin-top:4px;font-variant-numeric:tabular-nums}
+  .kpi .s{font-size:12px;color:var(--muted);margin-top:2px}
+  .kpi.hl{border-color:#bfe3cf;background:#f3fbf6} .kpi.hl .v{color:#0e6b35}
+  .dgrid{display:grid;grid-template-columns:2fr 1fr;gap:12px;margin-top:12px}
+  @media (max-width:1000px){ .dgrid{grid-template-columns:1fr} }
+  .dcard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-top:12px}
+  .dgrid .dcard{margin-top:0}
+  .dcard-h{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+  .dcard-h h3{margin:0;font-size:14px}
+  .tablewrap.flat{margin:0;border:0;border-radius:0}
+  .tablewrap.flat table{min-width:0}
+  .nowrow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #eef1f5;gap:10px}
+  .nowrow:last-child{border-bottom:0}
+  .nowrow b{font-size:18px}
+  .nowrow .lnk{font-size:12px}
+  .dfoot{margin-top:14px}
+  .rk{display:inline-flex;width:22px;height:22px;border-radius:50%;align-items:center;justify-content:center;font-size:11px;font-weight:700;background:#f2c94c;color:#3a2a00;margin-right:6px}
+  tr.tot td{font-weight:700;background:#f7f9fc}
+  .modal{position:fixed;inset:0;background:rgba(15,39,66,.35);display:none;align-items:center;justify-content:center;z-index:5}
+  .modal.show{display:flex}
+  .modal .card{background:#fff;border-radius:12px;padding:18px;width:340px;box-shadow:0 10px 40px rgba(0,0,0,.2)}
+  .modal h3{margin:0 0 10px;font-size:15px}
+  .modal .acts{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+  .soql{font-family:ui-monospace,Menlo,monospace;font-size:11px;white-space:pre-wrap;background:#f7f9fc;border:1px solid var(--line);border-radius:8px;padding:10px;max-height:260px;overflow:auto;width:100%}
+  .modal .card.wide{width:720px;max-width:92vw}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <nav class="topnav">
+      <button id="navDash">Dashboard</button>
+      <button id="navHub" class="on">Renewal Prospecting Hub</button>
+      <button id="navClose">Renewal Closing Hub</button>
+      <button id="navHit"><span id="hlNavName">My Hitlist</span><span class="cnt" id="hlNavCnt">0</span></button>
+    </nav>
+    <div class="sub" id="subHub">One place to prospect your book · rows show the most recent <b>funded</b> deal; stage and notes come from the most recent opportunity</div>
+    <div class="sub" id="subDash" style="display:none">Your month at a glance · live from Salesforce</div>
+    <div class="sub" id="subClose" style="display:none">Every deal you're working to close · Underwriting through Sent to Operations</div>
+    <div class="sub" id="subHit" style="display:none">Your personal follow-up list · only you and your manager can see it · nothing here is ever written to Salesforce</div>
+  </div>
+  <span class="proto">Prototype</span>
+  <div class="spacer"></div>
+  <div class="viewas">
+    <label for="viewAs">Viewing as</label>
+    <select id="viewAs"></select>
+    <select id="book" style="display:none">
+      <option value="ALL">Manager · All books</option>
+      <option value="Book 1">Book 1 rep (Book 1 + House)</option>
+      <option value="Book 2" selected>Book 2 rep (Book 2 + House)</option>
+      <option value="HOUSE">House Book only</option>
+    </select>
+  </div>
+</header>
+
+<main>
+  <aside>
+    <div class="aside-scroll">
+      <div class="sec-title" style="margin-top:2px">Quick starts</div>
+      <select id="presets" class="qs"><option value="">Choose a quick start…</option></select>
+      <div class="hint" id="qsNote" style="margin-top:5px;min-height:14px"></div>
+
+      <div class="sec-title">My Lists</div>
+      <select id="myLists" class="qs"><option value="">Open a saved list…</option></select>
+      <div class="listacts" id="listActs" style="display:none">
+        <button class="lnk" id="listUpdate" title="Save the current filters into this list">Update</button>
+        <button class="lnk" id="listRename">Rename</button>
+        <button class="lnk danger" id="listDelete">Delete</button>
+      </div>
+      <div class="hint" id="listNote" style="margin-top:5px;min-height:14px"></div>
+
+      <div class="sec-title">Filters</div>
+
+      <details open data-g="deal">
+        <summary>Deal status <span class="count"></span></summary>
+        <div class="grp">
+          <div class="f"><label class="t">Funded deal type</label>
+            <div class="checks" id="f_type">
+              <label><input type="checkbox" value="New">New</label>
+              <label><input type="checkbox" value="Renewal">Renewal</label>
+              <label><input type="checkbox" value="Other">Other products</label>
+            </div></div>
+          <div class="f"><label class="t">Newer opportunity since the funded deal?</label>
+            <select id="f_newer"><option value="">Either</option><option value="yes">Yes — a newer opp exists</option><option value="no">No — funded deal is the latest</option></select></div>
+          <div class="f"><label class="t">Stage of most recent opportunity</label>
+            <div class="stagebox" id="f_stage"></div>
+            <div class="hint">Leave blank for any stage.</div></div>
+        </div>
+      </details>
+
+      <details open data-g="pay">
+        <summary>Paydown <span class="count"></span></summary>
+        <div class="grp">
+          <div class="f"><label class="t">EPI % (estimated paid in)</label>
+            <div class="row2"><input type="number" id="f_epiMin" placeholder="Min"><input type="number" id="f_epiMax" placeholder="Max"></div>
+            <div class="checks" style="margin-top:6px" id="epiQuick">
+              <label><input type="radio" name="epiq" value="40,79.99">40–79%</label>
+              <label><input type="radio" name="epiq" value="80,99.99">80–99%</label>
+            </div></div>
+          <div class="f"><label class="t">Estimated payoff on or before</label><input type="date" id="f_payoff"></div>
+          <div class="f"><label class="t">Payment frequency</label>
+            <div class="checks" id="f_freq">
+              <label><input type="checkbox" value="Daily">Daily</label>
+              <label><input type="checkbox" value="Weekly">Weekly</label>
+              <label><input type="checkbox" value="Bi-Weekly">Bi-weekly</label>
+              <label><input type="checkbox" value="Monthly">Monthly</label>
+            </div></div>
+        </div>
+      </details>
+
+      <details open data-g="pif">
+        <summary>Paid in full <span class="count"></span></summary>
+        <div class="grp">
+          <div class="checks"><label><input type="checkbox" id="f_pif">Paid in Full</label></div>
+          <div class="f"><label class="t">Year</label>
+            <div class="row2">
+              <select id="f_pifYear" disabled><option value="">Any year</option></select>
+              <select id="f_pifBasis" disabled><option value="funded">Year funded</option><option value="paid">Year paid off</option></select>
+            </div>
+            <div class="checks" style="margin-top:6px"><label><input type="checkbox" id="f_pifPlus" disabled>And later years</label></div>
+            <div class="hint">e.g. 2024 + "And later years" = paid in full, funded 2024 or later.</div></div>
+        </div>
+      </details>
+
+      <details data-g="terms">
+        <summary>Deal terms <span class="count"></span></summary>
+        <div class="grp">
+          <div class="f"><label class="t">Funded date</label>
+            <div class="row2"><input type="date" id="f_fdFrom" title="From"><input type="date" id="f_fdTo" title="To"></div></div>
+          <div class="f"><label class="t">Funded amount ($)</label>
+            <div class="row2"><input type="number" id="f_amtMin" placeholder="Min"><input type="number" id="f_amtMax" placeholder="Max"></div></div>
+          <div class="f"><label class="t">Commission $ at least</label><input type="number" id="f_commMin" placeholder="e.g. 1000"></div>
+          <div class="f"><label class="t">Product</label>
+            <div class="checks" id="f_product">
+              <label><input type="checkbox" value="MCA">MCA</label>
+              <label><input type="checkbox" value="Line of Credit">Line of credit</label>
+              <label><input type="checkbox" value="Loan">Loan</label>
+            </div></div>
+          <div class="f"><label class="checks" style="display:block"><label><input type="checkbox" id="f_multi">Funded more than once</label></label></div>
+        </div>
+      </details>
+
+      <details data-g="lender">
+        <summary>Lender <span class="count"></span></summary>
+        <div class="grp">
+          <div class="f"><label class="t">Show deals funded by</label>
+            <select id="f_lenderMode"><option value="in">Only the selected lenders</option><option value="out">Any lender except the selected</option></select></div>
+          <div class="f"><label class="t">Lenders</label>
+            <input type="text" id="lenderSearch" placeholder="Search lenders…" style="margin-bottom:6px">
+            <div class="stagebox" id="f_lenders" style="max-height:200px"></div>
+            <div class="hint" style="display:flex;justify-content:space-between;margin-top:4px"><span id="lenderSel">None selected</span><a href="#" id="lenderClear" style="color:var(--accent)">Clear</a></div></div>
+          <div class="f"><label class="t">Or lender name contains</label><input type="text" id="f_lender" placeholder="e.g. Torro, CAN -"><div class="hint">For lenders not in the list. Separate several with commas.</div></div>
+        </div>
+      </details>
+
+      <details open data-g="act">
+        <summary>Activity <span class="count"></span></summary>
+        <div class="grp">
+          <div class="f"><label class="t">Last note</label>
+            <div class="row3">
+              <select id="f_noteOp"><option value="">Any time</option><option value="gt">More than</option><option value="le">Within</option><option value="never">Never noted</option></select>
+              <input type="number" id="f_noteDays" placeholder="days" min="0">
+            </div>
+            <div class="hint">"More than 7" = nobody has noted it in 7+ days (never-noted deals included).</div></div>
+          <div class="f"><label class="t">Last note made by (name contains)</label><input type="text" id="f_noteBy" placeholder="e.g. Rice"></div>
+        </div>
+      </details>
+
+      <details data-g="sig">
+        <summary>Signals <span class="count"></span></summary>
+        <div class="grp">
+          <div class="checks"><label><input type="checkbox" id="f_sigAll">Select all</label></div>
+          <div class="checks" id="f_signals">
+            <label><input type="checkbox" value="SendBlue EPI">SendBlue</label>
+            <label><input type="checkbox" value="Marketing - TextUs (R)">TextUs</label>
+            <label><input type="checkbox" value="Marketing - Apten (R)">Apten</label>
+            <label><input type="checkbox" value="Instantly (R)">Instantly</label>
+            <label><input type="checkbox" value="Marketing - RM">Rebecca Miller</label>
+            <label><input type="checkbox" value="Marketing - RD">Rachel Duncan</label>
+            <label><input type="checkbox" value="Renewal Bot">Renewal Bot</label>
+          </div>
+          <div class="hint">Shows accounts whose most recent opp is tagged with any of the checked sources (Assisted by field).</div>
+        </div>
+      </details>
+
+      <details data-g="dec">
+        <summary>Declines <span class="count"></span></summary>
+        <div class="grp">
+          <div class="f"><label class="t">Merchant decline reason (latest opp)</label><div class="stagebox" id="f_mdr" style="max-height:150px"></div></div>
+          <div class="checks">
+            <label><input type="checkbox" id="f_funderDec">Funder declined</label>
+            <label><input type="checkbox" id="f_priorMdec">Prior merchant decline</label>
+          </div>
+        </div>
+      </details>
+
+      <details data-g="merch">
+        <summary>Merchant <span class="count"></span></summary>
+        <div class="grp">
+          <div class="f"><label class="t">Avg monthly sales at least ($)</label><input type="number" id="f_sales"></div>
+          <div class="row2">
+            <div class="f"><label class="t">Credit score ≥</label><input type="number" id="f_credit"></div>
+            <div class="f"><label class="t">Months in business ≥</label><input type="number" id="f_mib"></div>
+          </div>
+          <div class="f"><label class="t">ISO / lead source contains</label><input type="text" id="f_iso"></div>
+        </div>
+      </details>
+
+      <details data-g="ppl">
+        <summary>People <span class="count"></span></summary>
+        <div class="grp">
+          <div class="f"><label class="t">Original agent (funded opp owner) contains</label><input type="text" id="f_agent"></div>
+          <div class="f"><label class="t">Account owner contains</label><input type="text" id="f_acctOwner"></div>
+          <div class="f"><label class="t">Renewal closer on latest opp contains</label><input type="text" id="f_closer"></div>
+          <div class="f"><label class="t">Renewal opener on latest opp contains</label><input type="text" id="f_opener"></div>
+        </div>
+      </details>
+
+      <div class="sec-title">Always excluded</div>
+      <div class="hint">Do Not Contact · Excluded From Prospecting List · Non-Marketing List</div>
+    </div>
+    <div class="aside-foot">
+      <button class="btn" id="reset">Reset</button>
+      <button class="btn" id="saveView">Save as list</button>
+      <button class="btn primary" id="run">Run</button>
+    </div>
+  </aside>
+
+  <section class="results">
+    <div class="toolbar">
+      <div class="stat"><b id="sCount">—</b><span>Accounts</span></div>
+      <div class="divider"></div>
+      <div class="stat"><b id="sFunded">—</b><span>Funded (last deal)</span></div>
+      <div class="divider"></div>
+      <div class="stat"><b id="sComm">—</b><span>Commission (last deal)</span></div>
+      <div class="divider"></div>
+      <select id="eligF" style="width:auto"><option value="">All eligibility</option><option value="green">Eligible now</option><option value="yellow">Within 15 pts</option><option value="red">More than 15 pts away</option><option value="none">No lender rule</option></select>
+      <input type="text" class="search" id="q" placeholder="Search results by account, owner, lender, note…">
+      <div class="spacer" style="flex:1"></div>
+      <span class="status" id="status">Pick filters and press Run.</span>
+      <button class="btn" id="showSoql" title="The exact Salesforce query, for IT">Query</button>
+    </div>
+    <div class="tabsbar">
+      <button class="tab on" id="tabProspect">Prospecting</button>
+      <button class="tab" id="tabFollow">My Follow-ups</button>
+      <span class="hint" id="tabHint"></span>
+    </div>
+    <div class="banner" id="banner"></div>
+    <div class="tablewrap" id="wrap">
+      <div class="empty" id="empty"><b>Ready when you are</b>Choose a quick start or set filters on the left, then press Run.</div>
+      <table id="tbl" style="display:none">
+        <thead><tr id="thead"></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+      <div class="more" id="more" style="display:none"><button class="btn" id="moreBtn">Show more</button></div>
+    </div>
+  </section>
+</main>
+
+<section id="dashView" class="hitview dash" style="display:none">
+  <div class="dscroll">
+    <div class="dhero">
+      <div>
+        <div class="dhello" id="dHello">Your month</div>
+        <div class="dmonth" id="dMonth"></div>
+      </div>
+      <div class="dpace">
+        <div class="dpace-l"><span id="dDays"></span><span id="dUpdated" class="hint"></span></div>
+        <div class="dbar"><i id="dBar"></i></div>
+      </div>
+      <button class="btn" id="dRefresh">Refresh</button>
+    </div>
+    <div class="banner" id="dBanner"></div>
+    <div class="kpis" id="dKpis"></div>
+    <div class="dgrid">
+      <div class="dcard wide">
+        <div class="dcard-h"><h3 id="dChartTitle">Commission by day</h3><span class="hint" id="dChartSub"></span></div>
+        <div id="dChart"></div>
+      </div>
+      <div class="dcard">
+        <div class="dcard-h"><h3>Right now</h3></div>
+        <div id="dNow"></div>
+      </div>
+    </div>
+    <div class="dcard" id="dTeamCard" style="display:none">
+      <div class="dcard-h"><h3 id="dTeamTitle">Team month to date</h3><span class="hint">Sorted by commission · team total counts closers only</span></div>
+      <div class="tablewrap flat"><table id="dTeam"></table></div>
+    </div>
+    <div class="dcard" id="dDealsCard">
+      <div class="dcard-h"><h3 id="dDealsTitle">Funded this month</h3></div>
+      <div class="tablewrap flat"><table id="dDeals"></table></div>
+    </div>
+    <div class="hint dfoot">Subs are renewal deals that hit Underwriting this month. Approvals are those subs that have been approved. Funded counts renewal deals funded this month. Offer rate = approvals ÷ subs · close rate = funded ÷ approvals · projections use business days elapsed.</div>
+  </div>
+</section>
+
+<section id="closeView" class="hitview" style="display:none">
+  <div class="pills" id="chPills"></div>
+  <div class="toolbar">
+    <div class="stat"><b id="chCount">—</b><span>Deals</span></div>
+    <div class="divider"></div>
+    <div class="stat"><b id="chApproved">—</b><span>Approved $</span></div>
+    <div class="divider"></div>
+    <div class="stat"><b id="chComm">—</b><span>Commission</span></div>
+    <div class="divider"></div>
+    <div class="stat"><b id="chAging">—</b><span>Aging approvals</span></div>
+    <div class="divider"></div>
+    <select id="chRole" style="width:auto" title="Which of your deals to show">
+      <option value="">All my deals</option><option value="closer">I'm the closer</option><option value="opener">I'm the opener</option><option value="owner">I own the opp</option>
+    </select>
+    <select id="chCloser" style="width:auto;display:none"><option value="">All closers</option></select>
+    <select id="chOpener" style="width:auto;display:none"><option value="">All openers</option></select>
+    <select id="chAge" style="width:auto" title="Days in current stage">
+      <option value="">Any time in stage</option><option value="3">3+ days in stage</option><option value="7">7+ days in stage</option><option value="14">14+ days in stage</option>
+    </select>
+    <input type="text" class="search" id="chQ" placeholder="Search account, lender, note…">
+    <div class="spacer" style="flex:1"></div>
+    <span class="status" id="chStatus"></span>
+    <button class="btn" id="chRefresh">Refresh</button>
+  </div>
+  <div class="banner" id="chBanner"></div>
+  <div class="tablewrap">
+    <div class="empty" id="chEmpty"><b>Loading your deals…</b></div>
+    <table id="chTbl" style="display:none"><thead><tr id="chHead"></tr></thead><tbody id="chBody"></tbody></table>
+  </div>
+</section>
+
+<section id="hitView" class="hitview" style="display:none">
+  <div class="hlwho" id="hlWho" style="display:none">
+    <label for="hlRep">Hitlist</label>
+    <select id="hlRep"><option value="">My Hitlist</option></select>
+    <span class="hint" id="hlRO"></span>
+  </div>
+  <div class="pills" id="hlPills"></div>
+  <div class="toolbar">
+    <div class="stat"><b id="hlCount">0</b><span>Prospects</span></div>
+    <div class="divider"></div>
+    <div class="stat"><b id="hlDueN">0</b><span>Follow-ups due</span></div>
+    <div class="divider"></div>
+    <div class="stat"><b id="hlFundedN">0</b><span>Funded</span></div>
+    <div class="divider"></div>
+    <input type="text" class="search" id="hlQ" placeholder="Search your hitlist…">
+    <div class="spacer" style="flex:1"></div>
+    <span class="status" id="hlStatus"></span>
+    <button class="btn" id="hlRefresh" title="Pull the latest paid-in %, stage and notes from Salesforce. Read-only.">Refresh from Salesforce</button>
+    <div class="addbox" id="hlAddBox">
+      <input type="text" id="hlAdd" placeholder="+ Add a business by name…" autocomplete="off">
+      <div class="addres" id="hlAddRes"></div>
+    </div>
+  </div>
+  <div class="banner" id="hlBanner"></div>
+  <div class="tablewrap">
+    <div class="empty" id="hlEmpty"><b>Your Hitlist is empty</b>In the Prospecting Hub, click <b>+ Hitlist</b> on any account, or add a business by name above.</div>
+    <table id="hlTbl" style="display:none"><thead><tr id="hlHead"></tr></thead><tbody id="hlBody"></tbody></table>
+  </div>
+</section>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="dhead">
+    <div><div class="dtitle" id="dTitle"></div><div class="hint" id="dSub"></div></div>
+    <button class="btn" id="dClose" aria-label="Close">✕</button>
+  </div>
+  <div class="dbody" id="dBody"></div>
+</aside>
+<div class="modal" id="saveModal"><div class="card">
+  <h3 id="saveTitle">Save as a new list</h3>
+  <input type="text" id="saveName" maxlength="60" placeholder="e.g. Book 2 · 80%+ · no note 7 days">
+  <div class="hint" id="saveHint" style="margin-top:6px">Saves your current filters and book view. Only you can see your lists.</div>
+  <div class="hint" id="saveErr" style="margin-top:6px;color:var(--bad)"></div>
+  <div class="acts"><button class="btn" id="saveCancel">Cancel</button><button class="btn primary" style="flex:0" id="saveOk">Save</button></div>
+</div></div>
+<div class="modal" id="confirmModal"><div class="card">
+  <h3 id="confirmTitle">Delete list?</h3>
+  <div class="hint" id="confirmText"></div>
+  <div class="acts"><button class="btn" id="confirmNo">Cancel</button><button class="btn primary" style="flex:0;background:var(--bad);border-color:var(--bad)" id="confirmYes">Delete</button></div>
+</div></div>
+<div class="modal" id="soqlModal"><div class="card wide">
+  <h3>Salesforce query behind this view</h3>
+  <textarea class="soql" id="soqlText" rows="14" readonly></textarea>
+  <div class="acts"><button class="btn" id="soqlCopy">Copy</button><button class="btn primary" style="flex:0" id="soqlClose">Close</button></div>
+</div></div>
+
+<script>
+(function(){
+"use strict";
+const SERVER = "MCP Host", TOOL = "sfprod__soql_query";
+const SF_BASE = "https://bigthink.lightning.force.com";
+const PAGE = 500, MAX_PAGES = 20;
+
+const STAGES = ["Renewal Prospecting","Hot Opportunity","Application In","Application Missing Info","Underwriting","Submitted","Sent to Lenders","Approved","Pre-Approved","Contracts Out","Contracts In","Sent to Operations","Funded","Declined","Referred","Pitched","Renewal","Resubmit","Offers In"];
+const LENDERS = ["Alta", "BBIG", "Big Think Capital", "Bitty Advance", "Brian C", "Britecap", "Byzfunder", "CAN - 2m7", "CAN - CanaCap", "CAN - Driven", "CAN - Greenbox", "CAN - Merchant Growth", "CAN - Sheaves Capital", "Can Capital", "Capital Assist", "Capitalize Group", "Cashera", "CFG", "Clara Capital", "Click", "CRE - LoanGeek", "Credibly", "Credit Desk", "Direct Merchants Funding", "Edge Capital", "EF - Everlasting Capital", "Elevate", "Everest", "Expansion Capital Group", "Fenix", "Figure", "Flexibility", "Fora", "Forward Financing", "Fox", "Fresh Funding", "Fundation", "Fundbox", "Fundo", "GFE", "Gigfi", "Giggle", "Good Funding", "Greenbox", "Headway", "IBF - Term Loan", "IBF TL", "Idea", "iMerchant", "Kalamata", "Kapitus", "LCF", "Lendini", "Levo", "LoanBud", "LoanBud - Term Loan", "Loot", "Lynks Capital", "Lynx", "Mantis", "Mulligan", "NewTek", "Ondeck", "One River", "One Team Capital - Term Loan", "PAC Western", "PEAC", "Pearl", "Rapid Finance", "Reliable Capital", "Retro Advance", "Revenued", "RTMI", "Samson", "SBA - LoanBud", "Spartan Capital Group", "Specialty Capital", "Torro MCA", "Torro SLOC", "Vader", "Vox", "Wall Funding"];
+const ELIG = {"Backd": 50, "Britecap": 40, "Can Capital": 45, "Channel Partners": 50, "Credibly": 45, "Fora": 60, "Kapitus": 45, "Renewal - Kapitus": 45, "Libertas": 40, "Mulligan": 50, "PEAC": 50, "EF - PEAC": 50, "Rapid Finance": 50, "RTMI": 50, "Wall Funding": 50, "Byzfunder": 40, "Capitalize Group": 65, "Captap": 40, "Expansion Capital Group": 40, "Everest": 50, "Forward Financing": 50, "Fresh Funding": 45, "Fundworks": 40, "Good Funding": 60, "Greenbox": 50, "CAN - Greenbox": 50, "Kalamata": 50, "Likety": 50, "Pearl": 45, "Spartan Capital Group": 40, "Specialty Capital": 40, "Vox": 40, "BBIG": 50, "Bitty Advance": 60, "Renewal - Bitty": 60, "Capital Assist": 50, "CFG": 55, "Edge Capital": 40, "Elevate": 40, "LCF": 50, "Loot": 60, "Luminar Capital": 40, "Lynks Capital": 60, "One River": 50, "Torro MCA": 47, "Vader": 50, "Bizcap": 50, "CAN - 2m7": 50, "CAN - Bizfund": 50, "CAN - CanaCap": 55, "CAN - EFSA": 45, "CAN - Elect Capital": 40, "CAN - Fundfi": 40, "CAN - KM Capital": 50, "CAN - Merchant Growth": 30, "CAN - Sheaves Capital": 50};
+const PEOPLE = [
+  {n:"Mike Santos", role:"Manager", book:"ALL"},
+  {n:"Gerald Trovato", role:"Closer", book:"Book 1"},{n:"Joseph Krajewski", role:"Closer", book:"Book 1"},{n:"Drew Larsen", role:"Closer", book:"Book 1"},
+  {n:"James Nunnery", role:"Closer", book:"Book 1"},{n:"Musyoka Mbithi", role:"Closer", book:"Book 1"},{n:"Sam Zorfas", role:"Team Lead", book:"ALL", closer:true, team:["Drew Larsen","James Nunnery","Musyoka Mbithi","Juan Espiritu","Austin Brown"]},
+  {n:"Vito Ricca", role:"Closer", book:"Book 2"},{n:"Chris Henao", role:"Closer", book:"Book 2"},{n:"Austin Brown", role:"Closer", book:"Book 2"},
+  {n:"Nicole Rice", role:"Closer", book:"Book 2"},{n:"Juan Espiritu", role:"Closer", book:"Book 2"},
+  {n:"Joe Mansi", role:"Opener", book:"ALL"},{n:"Fariah Alam", role:"Opener", book:"ALL"},{n:"Wess Jaten", role:"Opener", book:"ALL"},{n:"Melany Zapata", role:"Opener", book:"ALL"}
+];
+const MDR = ["Merchant unresponsive","No Longer Needs Financing","Dollar amount not high enough","Cost too expensive","Offer Expired","Funded Elsewhere","Wrong product","Never sent missing info","Term too Short / Payment too High","Payment frequency","Never Sent Specialty Docs","We funded with different product","Waiting for Renewal Eligibility"];
+
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+function mkChecks(el, list, name){ list.forEach(v=>{ const l=document.createElement("label"); const i=document.createElement("input"); i.type="checkbox"; i.value=v; l.appendChild(i); l.appendChild(document.createTextNode(v)); el.appendChild(l); }); }
+mkChecks($("f_stage"), STAGES); mkChecks($("f_mdr"), MDR); mkChecks($("f_lenders"), LENDERS);
+
+const vals = el => [...el.querySelectorAll("input:checked")].map(i=>i.value);
+const num = id => { const v=$(id).value; return v===""?null:Number(v); };
+const txt = id => $(id).value.trim();
+
+// ---------- presets mirroring the old per-rep folder ----------
+const PRESETS = [
+  {n:"Active Renewals", s:{type:["Renewal"], epiMax:99.99}},
+  {n:"Active New", s:{type:["New"], epiMax:99.99}},
+  {n:"80%+ Paid In", s:{epiMin:80, epiMax:99.99}},
+  {n:"No Note in 7+ Days", s:{noteOp:"gt", noteDays:7, epiMax:99.99}},
+  {n:"Paid in Full (2024+)", s:{pif:true, pifYear:"2024", pifBasis:"funded", pifPlus:true}},
+  {n:"Neglected Accounts", s:{fdFrom:isoDaysAgo(730), noteOp:"gt", noteDays:30}},
+  {n:"Renewal Prospecting", s:{stage:["Renewal Prospecting"], noteOp:"gt", noteDays:7}},
+  {n:"Merchant Declines", s:{stage:["Declined"], newer:"yes", noteOp:"gt", noteDays:7, mdrAny:true}},
+  {n:"Application In", s:{stage:["Application In"], noteOp:"gt", noteDays:7}},
+  {n:"Marketing Signals", s:{signals:["SendBlue EPI","Marketing - TextUs (R)","Marketing - Apten (R)","Instantly (R)","Marketing - RM","Marketing - RD","Renewal Bot"]}}
+];
+function isoDaysAgo(d){ const t=new Date(Date.now()-d*864e5); return t.toISOString().slice(0,10); }
+
+// ---------- read / write state ----------
+function getState(){
+  return {
+    type: vals($("f_type")), newer: $("f_newer").value, stage: vals($("f_stage")),
+    pif: $("f_pif").checked, pifYear: $("f_pifYear").value, pifBasis: $("f_pifBasis").value, pifPlus: $("f_pifPlus").checked,
+    epiMin: num("f_epiMin"), epiMax: num("f_epiMax"), payoff: $("f_payoff").value, freq: vals($("f_freq")),
+    fdFrom: $("f_fdFrom").value, fdTo: $("f_fdTo").value, amtMin: num("f_amtMin"), amtMax: num("f_amtMax"),
+    commMin: num("f_commMin"), lender: txt("f_lender"), lenders: vals($("f_lenders")), lenderMode: $("f_lenderMode").value, product: vals($("f_product")), multi: $("f_multi").checked,
+    noteOp: $("f_noteOp").value, noteDays: num("f_noteDays"),
+    noteBy: txt("f_noteBy"),
+    signals: vals($("f_signals")), mdr: vals($("f_mdr")), mdrAny: !!window.__mdrAny, funderDec: $("f_funderDec").checked, priorMdec: $("f_priorMdec").checked,
+    sales: num("f_sales"), credit: num("f_credit"), mib: num("f_mib"), iso: txt("f_iso"),
+    agent: txt("f_agent"), acctOwner: txt("f_acctOwner"), closer: txt("f_closer"), opener: txt("f_opener")
+  };
+}
+function setChecks(el, arr){ el.querySelectorAll("input").forEach(i=>i.checked=(arr||[]).includes(i.value)); }
+function setState(s){
+  s=s||{};
+  setChecks($("f_type"), s.type); $("f_newer").value=s.newer||""; setChecks($("f_stage"), s.stage);
+  $("f_pif").checked=!!s.pif; $("f_pifYear").value=s.pifYear||""; $("f_pifBasis").value=s.pifBasis||"funded"; $("f_pifPlus").checked=!!s.pifPlus; syncPif();
+  $("f_epiMin").value=s.epiMin??""; $("f_epiMax").value=s.epiMax??""; $("f_payoff").value=s.payoff||""; setChecks($("f_freq"), s.freq);
+  $("f_fdFrom").value=s.fdFrom||""; $("f_fdTo").value=s.fdTo||""; $("f_amtMin").value=s.amtMin??""; $("f_amtMax").value=s.amtMax??"";
+  $("f_commMin").value=s.commMin??""; $("f_lender").value=s.lender||""; setChecks($("f_lenders"), s.lenders); $("f_lenderMode").value=s.lenderMode||"in"; $("lenderSearch").value=""; filterLenders(); lenderSummary(); setChecks($("f_product"), s.product); $("f_multi").checked=!!s.multi;
+  $("f_noteOp").value=s.noteOp||""; $("f_noteDays").value=s.noteDays??"";
+  $("f_noteBy").value=s.noteBy||"";
+  setChecks($("f_signals"), s.signals); syncSigAll(); setChecks($("f_mdr"), s.mdr); window.__mdrAny=!!s.mdrAny; $("f_funderDec").checked=!!s.funderDec; $("f_priorMdec").checked=!!s.priorMdec;
+  $("f_sales").value=s.sales??""; $("f_credit").value=s.credit??""; $("f_mib").value=s.mib??""; $("f_iso").value=s.iso||"";
+  $("f_agent").value=s.agent||""; $("f_acctOwner").value=s.acctOwner||""; $("f_closer").value=s.closer||""; $("f_opener").value=s.opener||"";
+  document.querySelectorAll("input[name=epiq]").forEach(r=>r.checked=false);
+  updateCounts();
+}
+
+// ---------- SOQL ----------
+function likeAny(field, text){
+  const parts=text.split(",").map(t=>t.trim()).filter(Boolean);
+  if(!parts.length) return null;
+  return "(" + parts.map(p=>field+" LIKE '%"+esc(p)+"%'").join(" OR ") + ")";
+}
+function dayClause(op, days, daysField, dateField){
+  if(!op) return null;
+  if(op==="never") return dateField+" = null";
+  if(days==null || isNaN(days)) return null;
+  if(op==="gt") return "("+dateField+" = null OR "+daysField+" > "+days+")";
+  if(op==="le") return "("+dateField+" != null AND "+daysField+" <= "+days+")";
+  return null;
+}
+function buildWhere(s, book){
+  const F=["Is_Most_Recent_Funded_Opportunity__c = true"];
+  const L=["Is_Most_Recent_Opportunity__c = true","Do_Not_Contact__c = false","Exclude_From_Prospecting_List__c = false","Non_Marketing_List__c = false"];
+  const A=[];
+  // book
+  if(book==="Book 1") A.push("Owner.Renewal_Book__c IN ('Book 1','House Book')");
+  else if(book==="Book 2") A.push("Owner.Renewal_Book__c IN ('Book 2','House Book')");
+  else if(book==="HOUSE") A.push("Owner.Renewal_Book__c = 'House Book'");
+  // funded deal
+  if(s.type.length && s.type.length<3){
+    const t=[]; if(s.type.includes("New")) t.push("Type = 'New'");
+    if(s.type.includes("Renewal")) t.push("Type = 'Renewal'");
+    if(s.type.includes("Other")) t.push("(Type = null OR (Type != 'New' AND Type != 'Renewal'))");
+    F.push("("+t.join(" OR ")+")");
+  }
+  if(s.pif){
+    F.push("Estimated_Paid_In__c >= 100");
+    if(s.pifYear){
+      const fld = s.pifBasis==="paid" ? "X100_Paid_In__c" : "csbs__Funded_Date__c";
+      F.push(fld+" >= "+s.pifYear+"-01-01");
+      if(!s.pifPlus) F.push(fld+" <= "+s.pifYear+"-12-31");
+    }
+  }
+  if(s.epiMin!=null) F.push("Estimated_Paid_In__c >= "+s.epiMin);
+  if(s.epiMax!=null) F.push("Estimated_Paid_In__c <= "+s.epiMax);
+  if(s.payoff) F.push("Est_Payoff_Date__c <= "+s.payoff);
+  if(s.freq.length) F.push("csbs__Payment_Frequency__c IN ("+s.freq.map(v=>"'"+esc(v)+"'").join(",")+")");
+  if(s.fdFrom) F.push("csbs__Funded_Date__c >= "+s.fdFrom);
+  if(s.fdTo) F.push("csbs__Funded_Date__c <= "+s.fdTo);
+  if(s.amtMin!=null) F.push("csbs__Funded__c >= "+s.amtMin);
+  if(s.amtMax!=null) F.push("csbs__Funded__c <= "+s.amtMax);
+  if(s.commMin!=null) F.push("csbs__Commission_Amount__c >= "+s.commMin);
+  { const parts=s.lender.split(",").map(t=>t.trim()).filter(Boolean);
+    if(s.lenders.length || parts.length){
+      if(s.lenderMode==="out"){
+        const c=[];
+        if(s.lenders.length) c.push("csbs__Lender__c NOT IN ("+s.lenders.map(v=>"'"+esc(v)+"'").join(",")+")");
+        parts.forEach(p=>c.push("(NOT csbs__Lender__c LIKE '%"+esc(p)+"%')"));
+        F.push("(csbs__Lender__c = null OR ("+c.join(" AND ")+"))");
+      } else {
+        const c=[];
+        if(s.lenders.length) c.push("csbs__Lender__c IN ("+s.lenders.map(v=>"'"+esc(v)+"'").join(",")+")");
+        parts.forEach(p=>c.push("csbs__Lender__c LIKE '%"+esc(p)+"%'"));
+        F.push("("+c.join(" OR ")+")");
+      }
+    } }
+  if(s.product.length) F.push("csbs__Product__c IN ("+s.product.map(v=>"'"+esc(v)+"'").join(",")+")");
+  if(s.multi) F.push("Has_Multiple_Fundings__c = true");
+  if(s.sales!=null) F.push("csbs__Avg_Gross_Monthly_Sales__c >= "+s.sales);
+  if(s.credit!=null) F.push("Credit_Score__c >= "+s.credit);
+  if(s.mib!=null) F.push("csbs__Months_In_Business__c >= "+s.mib);
+  const iso=likeAny("ISO_Name__c", s.iso); if(iso) F.push(iso);
+  const ag=likeAny("Owner.Name", s.agent); if(ag) F.push(ag);
+  const ao=likeAny("Owner.Name", s.acctOwner); if(ao) A.push(ao);
+  // latest opp
+  if(s.newer==="yes") L.push("Is_Most_Recent_Funded_Opportunity__c = false");
+  if(s.newer==="no") L.push("Is_Most_Recent_Funded_Opportunity__c = true");
+  if(s.stage.length) L.push("StageName IN ("+s.stage.map(v=>"'"+esc(v)+"'").join(",")+")");
+  let c;
+  if((c=dayClause(s.noteOp, s.noteDays, "Last_Note_Days__c", "Last_Note_Date__c"))) L.push(c);
+  const nb=likeAny("Last_Note_Made_By__r.Name", s.noteBy); if(nb) L.push(nb);
+  if(s.signals.length) L.push("Assisted_by__c INCLUDES ("+s.signals.map(v=>"'"+esc(v)+"'").join(",")+")");
+  if(s.mdr.length) L.push("Merchant_Decline_Reason__c IN ("+s.mdr.map(v=>"'"+esc(v)+"'").join(",")+")");
+  else if(s.mdrAny) L.push("Merchant_Decline_Reason__c != null");
+  if(s.funderDec) L.push("Funder_Decline_Reason__c != null");
+  if(s.priorMdec) L.push("Prior_Merchant_Decline__c = true");
+  const cl=likeAny("Renewal_Closer__r.Name", s.closer); if(cl) L.push(cl);
+  const op=likeAny("Renewal_Opener__r.Name", s.opener); if(op) L.push(op);
+  A.push("Id IN (SELECT AccountId FROM Opportunity WHERE "+F.join(" AND ")+")");
+  A.push("Id IN (SELECT AccountId FROM Opportunity WHERE "+L.join(" AND ")+")");
+  return A;
+}
+const OPP_FIELDS = "Id, Type, StageName, Owner.Name, csbs__Lender__c, csbs__Funded__c, csbs__Commission_Amount__c, csbs__Commission_Percentage__c, Estimated_Paid_In__c, CloseDate, csbs__Funded_Date__c, Last_Note_Date__c, Last_Note_Days__c, Last_Note__c, Last_Note_Made_By__r.Name, Is_Most_Recent_Opportunity__c, Is_Most_Recent_Funded_Opportunity__c";
+function buildSoql(where, afterId){
+  const w = where.slice(); if(afterId) w.push("Id > '"+esc(afterId)+"'");
+  return "SELECT Id, Name, Owner.Name, Owner.Renewal_Book__c, (SELECT "+OPP_FIELDS+" FROM Opportunities WHERE Is_Most_Recent_Funded_Opportunity__c = true OR Is_Most_Recent_Opportunity__c = true) FROM Account WHERE "+w.join(" AND ")+" ORDER BY Id";
+}
+
+// ---------- data ----------
+let mcp=null, rows=[], view=[], sortKey="epi", sortDir=-1, shown=0, running=false;
+const mcpReady = (window.claude && claude.use) ? claude.use("mcp").then(m=>{mcp=m; if(!m) noMcp(); return m;}).catch(()=>{noMcp();return null;}) : Promise.resolve(null).then(()=>{noMcp();return null;});
+function noMcp(){ banner("info","Live Salesforce data isn't available in this view. Open the page on claude.ai with the MCP Host connector connected."); }
+function banner(kind,msg){ const b=$("banner"); b.className="banner show "+kind; b.textContent=msg; }
+function clearBanner(){ $("banner").className="banner"; }
+
+function toArray(p){
+  if(Array.isArray(p)) return p;
+  if(p && Array.isArray(p.records)) return p.records;
+  if(typeof p==="string"){ try{ const j=JSON.parse(p); return toArray(j);}catch(e){ throw {code:"tool_error", message:p}; } }
+  return [];
+}
+function errMsg(e){
+  const c=e&&e.code;
+  if(c==="needs_reauth") return "Your MCP Host connection expired. Reconnect MCP Host in claude.ai Settings → Connectors, then Run again.";
+  if(c==="server_not_connected"||c==="selection_required") return "MCP Host isn't connected for you. Add it in claude.ai Settings → Connectors.";
+  if(c==="not_in_manifest"||c==="approval_required"||c==="consent_required") return "This page needs your OK to query Salesforce through MCP Host. Press Run and allow it when asked.";
+  if(c==="blocked_by_policy") return "Your organization blocks this Salesforce query for your account.";
+  if(c==="server_unavailable") return "Salesforce didn't answer in time. Try Run again in a moment.";
+  if(c==="tool_error") return "Salesforce rejected the query: "+(e.message||"").slice(0,300);
+  return "Something went wrong reaching Salesforce"+(e&&e.message?": "+String(e.message).slice(0,200):".");
+}
+function shape(acc){
+  const recs=(acc.Opportunities&&acc.Opportunities.records)||[];
+  const f=recs.find(r=>r.Is_Most_Recent_Funded_Opportunity__c)||{};
+  const l=recs.find(r=>r.Is_Most_Recent_Opportunity__c)||f;
+  const book=(acc.Owner&&acc.Owner.Renewal_Book__c)||"—";
+  return {
+    acctId:acc.Id, account:acc.Name||"", acctOwner:(acc.Owner&&acc.Owner.Name)||"", book,
+    type:f.Type||"", oppOwner:(f.Owner&&f.Owner.Name)||"", stage:l.StageName||"", newer: l.Id && f.Id && l.Id!==f.Id,
+    lender:f.csbs__Lender__c||"", funded:f.csbs__Funded__c||0, comm:f.csbs__Commission_Amount__c||0, commPct:f.csbs__Commission_Percentage__c||0,
+    epi:f.Estimated_Paid_In__c||0, close:f.CloseDate||"", fundedDate:f.csbs__Funded_Date__c||"",
+    noteDate:l.Last_Note_Date__c||"", noteDays:l.Last_Note_Date__c? (l.Last_Note_Days__c??null) : null, note:l.Last_Note__c||"",
+    noteBy:(l.Last_Note_Made_By__r&&l.Last_Note_Made_By__r.Name)||"", fundedOppId:f.Id||"", latestOppId:l.Id||"",
+    ...eligOf(f.csbs__Lender__c, f.Estimated_Paid_In__c||0)
+  };
+}
+
+async function run(){
+  if(running) return;
+  await mcpReady;
+  if(!mcp){ noMcp(); return; }
+  running=true; $("run").disabled=true; clearBanner();
+  const where = mode==="follow" ? followWhere() : buildWhere(getState(), $("book").value);
+  rows=[]; let after=null, pages=0, capped=false;
+  try{
+    while(true){
+      $("status").textContent = "Loading from Salesforce… "+rows.length.toLocaleString()+" accounts";
+      const res=await mcp.callTool(SERVER, TOOL, {soql: buildSoql(where, after), limit: PAGE, user_request:"Renewal Prospecting Hub prototype query"});
+      const batch=toArray(res.payload);
+      batch.forEach(a=>rows.push(shape(a)));
+      pages++;
+      if(batch.length<PAGE) break;
+      after=batch[batch.length-1].Id;
+      if(pages>=MAX_PAGES){ capped=true; break; }
+    }
+    $("status").textContent="Updated "+new Date().toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
+    if(capped) banner("info","Showing the first "+rows.length.toLocaleString()+" accounts. Narrow the filters to see the rest.");
+  }catch(e){
+    banner("err", errMsg(e)); $("status").textContent = rows.length? "Partial results" : "No results";
+  }finally{ running=false; $("run").disabled=false; }
+  applyView();
+}
+
+// ---------- lender eligibility ----------
+// Renewal thresholds come from the BTC Lender Lookup matrix. Where a lender gives a range (e.g. 45-50%), the lower number is used.
+function eligOf(lender, epi){
+  const t = lender && Object.prototype.hasOwnProperty.call(ELIG, lender.trim()) ? ELIG[lender.trim()] : null;
+  if(t==null) return {eligAt:null, elig:"none", eligRank:3, eligGap:null};
+  if(epi>=t) return {eligAt:t, elig:"green", eligRank:0, eligGap:0};
+  if(t-epi<=15) return {eligAt:t, elig:"yellow", eligRank:1, eligGap:t-epi};
+  return {eligAt:t, elig:"red", eligRank:2, eligGap:t-epi};
+}
+
+// ---------- view as / follow-ups ----------
+let mode="prospect";
+const me = ()=> $("viewAs").value || "Mike Santos";
+function followWhere(){
+  return ["Id IN (SELECT AccountId FROM Opportunity WHERE Is_Most_Recent_Funded_Opportunity__c = true)",
+          "Id IN (SELECT AccountId FROM Opportunity WHERE Is_Most_Recent_Opportunity__c = true AND Last_Note_Made_By__r.Name = '"+esc(me())+"')"];
+}
+function setMode(m){
+  mode=m; $("tabProspect").classList.toggle("on", m==="prospect"); $("tabFollow").classList.toggle("on", m==="follow");
+  $("tabHint").textContent = m==="follow" ? "Accounts where "+(me()==="Mike Santos"?"you":me())+" left the most recent note, oldest first. Filters on the left don't apply here." : "";
+  if(m==="follow"){ sortKey="noteDays"; sortDir=-1; } else { sortKey="epi"; sortDir=-1; }
+  rows=[]; applyView(); run();
+}
+function workingTag(r){
+  if(!r.noteBy || r.noteDays==null || r.noteDays>7 || /integration|forml/i.test(r.noteBy)) return null;
+  const s=document.createElement("span"); const when = r.noteDays===0 ? "today" : r.noteDays===1 ? "1 day ago" : r.noteDays+" days ago";
+  if(r.noteBy===me()){ s.className="working me"; s.textContent="You noted this "+when; }
+  else { s.className="working"; s.textContent=r.noteBy.split(" ")[0]+" noted this "+when; s.title=r.noteBy+" noted this account "+when+". Leave it for them under the 7-day rule."; }
+  return s;
+}
+
+// ---------- peek panel ----------
+const peekCache={};
+async function q(soql, limit){ const res=await mcp.callTool(SERVER, TOOL, {soql, limit:limit||200, user_request:"Renewal Prospecting Hub peek panel"}); return toArray(res.payload); }
+function el(tag, cls, text){ const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
+function kv(pairs){ const dl=el("dl","kv"); pairs.forEach(([k,v])=>{ if(v==null||v==="") return; dl.appendChild(el("dt",null,k)); const dd=el("dd"); if(v instanceof Node) dd.appendChild(v); else dd.textContent=v; dl.appendChild(dd); }); return dl; }
+function sec(title){ const s=el("div","dsec"); s.appendChild(el("h4",null,title)); return s; }
+function closePeek(){ $("drawer").classList.remove("show"); $("scrim").classList.remove("show"); $("drawer").setAttribute("aria-hidden","true"); }
+async function openPeek(r){
+  $("dTitle").textContent=""; const a=document.createElement("a"); a.href=SF_BASE+"/lightning/r/Account/"+r.acctId+"/view"; a.target="_blank"; a.rel="noopener"; a.textContent=r.account; $("dTitle").appendChild(a);
+  $("dSub").textContent=r.book+" · Account owner: "+r.acctOwner;
+  const body=$("dBody"); body.textContent="";
+  const hbw=el("div"); hbw.appendChild(hitButton(r)); body.appendChild(hbw);
+  // summary from the row
+  const s0=sec("Last note"); s0.appendChild(el("div","lastnote", r.note || "No note on file."));
+  if(r.noteDate) s0.appendChild(el("div","hint", fmtDate(r.noteDate)+(r.noteBy?" · "+r.noteBy:""))); body.appendChild(s0);
+  const load=el("div","dload","Loading contact info, history and offers…"); body.appendChild(load);
+  $("drawer").classList.add("show"); $("scrim").classList.add("show"); $("drawer").setAttribute("aria-hidden","false");
+  try{
+    let d=peekCache[r.acctId];
+    if(!d){
+      const opps=await q("SELECT Id, Name, Type, StageName, CreatedDate, csbs__Funded_Date__c, csbs__Funded__c, csbs__Lender__c, csbs__Payback__c, csbs__Factor_Rate__c, csbs__Term__c, csbs__Payment_Frequency__c, csbs__Payment_Amount__c, Estimated_Paid_In__c, Owner.Name, Merchant_First_Name__c, Merchant_Last_Name__c, Phone_Number__c, mobile_phone__c, Email__c, Merchant_Decline_Reason__c, Account.Phone, Account.BillingCity, Account.BillingState FROM Opportunity WHERE AccountId = '"+esc(r.acctId)+"' ORDER BY CreatedDate DESC", 200);
+      const [offers, links] = await Promise.all([
+        q("SELECT Id, csbs__Opportunity__c, csbs__Lender__c, csbs__Funded__c, csbs__Payback__c, csbs__Factor_Rate__c, csbs__Term__c, csbs__Payment_Frequency__c, csbs__Payment_Amount__c, csbs__Product__c, csbs__Selected__c, Status__c, CreatedDate FROM csbs__Offer__c WHERE csbs__Opportunity__r.AccountId = '"+esc(r.acctId)+"' ORDER BY CreatedDate DESC", 100),
+        opps.length ? q("SELECT ContentDocumentId FROM ContentDocumentLink WHERE LinkedEntityId IN (SELECT Id FROM Opportunity WHERE AccountId = '"+esc(r.acctId)+"')", 500) : Promise.resolve([])
+      ]);
+      const ids=[...new Set(links.map(x=>x.ContentDocumentId).filter(x=>/^[a-zA-Z0-9]{15,18}$/.test(x)))].slice(0,150);
+      const notes = ids.length ? await q("SELECT Id, Title, TextPreview, CreatedDate, CreatedBy.Name FROM ContentNote WHERE Id IN ("+ids.map(i=>"'"+i+"'").join(",")+") ORDER BY CreatedDate DESC", 150) : [];
+      d={opps, offers, notes}; peekCache[r.acctId]=d;
+    }
+    load.remove(); renderPeek(body, d);
+  }catch(e){ load.textContent=errMsg(e); }
+}
+function renderPeek(body, d){
+  const o=d.opps[0]||{}, acc=o.Account||{};
+  const s1=sec("Contact");
+  s1.appendChild(kv([["Merchant", [o.Merchant_First_Name__c,o.Merchant_Last_Name__c].filter(Boolean).join(" ")],["Phone", o.Phone_Number__c||acc.Phone],["Mobile", o.mobile_phone__c],["Email", o.Email__c],["Location", [acc.BillingCity,acc.BillingState].filter(Boolean).join(", ")]]));
+  body.appendChild(s1);
+  // past fundings
+  const funded=d.opps.filter(x=>x.csbs__Funded_Date__c);
+  const s2=sec("Past fundings ("+funded.length+")");
+  if(funded.length){ const t=el("table","mini"); const hr=el("tr"); ["Funded","Lender","Amount","Factor","Term","Paid in"].forEach((h,i)=>hr.appendChild(el("th",i>=2?"r":null,h))); const th=el("thead"); th.appendChild(hr); t.appendChild(th); const tb=el("tbody");
+    funded.forEach(x=>{ const tr=el("tr"); tr.appendChild(el("td",null,fmtDate(x.csbs__Funded_Date__c))); tr.appendChild(el("td",null,x.csbs__Lender__c||"—")); tr.appendChild(el("td","r",money(x.csbs__Funded__c||0))); tr.appendChild(el("td","r",x.csbs__Factor_Rate__c?String(x.csbs__Factor_Rate__c):"—")); tr.appendChild(el("td","r",x.csbs__Term__c?(x.csbs__Term__c+" "+(x.csbs__Payment_Frequency__c||"")).trim():"—")); tr.appendChild(el("td","r",(x.Estimated_Paid_In__c||0).toFixed(0)+"%")); tb.appendChild(tr); });
+    t.appendChild(tb); s2.appendChild(t); } else s2.appendChild(el("div","hint","No fundings found."));
+  body.appendChild(s2);
+  // offers
+  const s3=sec("Offers ("+d.offers.length+(d.offers.length>=100?"+":"")+")");
+  if(d.offers.length){ const t=el("table","mini"); const hr=el("tr"); ["Date","Lender","Amount","Factor","Term","Payment","Status"].forEach((h,i)=>hr.appendChild(el("th",(i>=2&&i<=5)?"r":null,h))); const th=el("thead"); th.appendChild(hr); t.appendChild(th); const tb=el("tbody");
+    d.offers.forEach(x=>{ const tr=el("tr"); tr.appendChild(el("td",null,fmtDate(x.CreatedDate))); tr.appendChild(el("td",null,x.csbs__Lender__c||"—")); tr.appendChild(el("td","r",money(x.csbs__Funded__c||0))); tr.appendChild(el("td","r",x.csbs__Factor_Rate__c?String(x.csbs__Factor_Rate__c):"—")); tr.appendChild(el("td","r",x.csbs__Term__c?(x.csbs__Term__c+" "+(x.csbs__Payment_Frequency__c||"")).trim():"—")); tr.appendChild(el("td","r",x.csbs__Payment_Amount__c?money(x.csbs__Payment_Amount__c):"—")); tr.appendChild(el("td",x.csbs__Selected__c?"sel":null,x.csbs__Selected__c?"Selected":(x.Status__c||""))); tb.appendChild(tr); });
+    t.appendChild(tb); s3.appendChild(t); } else s3.appendChild(el("div","hint","No offers on file."));
+  body.appendChild(s3);
+  // notes history
+  const s4=sec("Notes history ("+d.notes.length+")");
+  if(d.notes.length) d.notes.forEach(n=>{ const w=el("div","note"); w.appendChild(el("div","meta",fmtDate(n.CreatedDate)+" · "+((n.CreatedBy&&n.CreatedBy.Name)||""))); if(n.Title && n.Title!==n.TextPreview) w.appendChild(el("div","tt",n.Title)); w.appendChild(el("div","tx",n.TextPreview||"")); s4.appendChild(w); });
+  else s4.appendChild(el("div","hint","No notes on file."));
+  body.appendChild(s4);
+  // opportunity history
+  const s5=sec("Opportunity history ("+d.opps.length+")");
+  const t=el("table","mini"); const hr=el("tr"); ["Created","Type","Stage","Owner","Decline reason"].forEach(h=>hr.appendChild(el("th",null,h))); const th=el("thead"); th.appendChild(hr); t.appendChild(th); const tb=el("tbody");
+  d.opps.forEach(x=>{ const tr=el("tr"); tr.appendChild(el("td",null,fmtDate(x.CreatedDate))); tr.appendChild(el("td",null,x.Type||"")); tr.appendChild(el("td",null,x.StageName||"")); tr.appendChild(el("td",null,(x.Owner&&x.Owner.Name)||"")); tr.appendChild(el("td",null,x.Merchant_Decline_Reason__c||"")); tb.appendChild(tr); });
+  t.appendChild(tb); s5.appendChild(t); body.appendChild(s5);
+}
+
+// ---------- table ----------
+const COLS=[
+  {k:"type",l:"Type"},{k:"oppOwner",l:"Opportunity Owner"},{k:"account",l:"Account Name"},{k:"stage",l:"Stage"},
+  {k:"lender",l:"Lender"},{k:"funded",l:"Funded",n:1},{k:"comm",l:"Commission $",n:1},{k:"commPct",l:"Commission %",n:1},
+  {k:"epi",l:"EPI %",n:1},{k:"eligRank",l:"Renewal Eligibility"},{k:"close",l:"Close Date"},{k:"noteDate",l:"Last Note Date"},{k:"note",l:"Last Note"}
+];
+const money=v=>"$"+Math.round(v).toLocaleString();
+function fmtDate(d){ if(!d) return ""; const t=new Date(d.length===10?d+"T12:00:00":d); return isNaN(t)?d:t.toLocaleDateString("en-US",{month:"numeric",day:"numeric",year:"numeric"}); }
+function header(){
+  const tr=$("thead"); tr.textContent="";
+  COLS.forEach(c=>{ const th=document.createElement("th"); th.textContent=c.l; if(c.n) th.className="num";
+    if(sortKey===c.k){ const a=document.createElement("span"); a.className="arr"; a.textContent=sortDir>0?"▲":"▼"; th.appendChild(a); }
+    th.onclick=()=>{ if(sortKey===c.k) sortDir*=-1; else { sortKey=c.k; sortDir=c.n?-1:1; } applyView(); };
+    tr.appendChild(th); });
+}
+function applyView(){
+  const q=$("q").value.trim().toLowerCase();
+  const ef=$("eligF").value;
+  view = rows.filter(r=>(!ef || r.elig===ef) && (!q || [r.account,r.oppOwner,r.acctOwner,r.lender,r.note,r.stage,r.noteBy].join(" ").toLowerCase().includes(q)));
+  view.sort((a,b)=>{ let x=a[sortKey], y=b[sortKey];
+    if(sortKey==="noteDate"){ x=x||""; y=y||""; }
+    if(sortKey==="noteDays"){ x=x==null?1e9:x; y=y==null?1e9:y; }
+    if(typeof x==="number"&&typeof y==="number") return (x-y)*sortDir;
+    return String(x).localeCompare(String(y))*sortDir; });
+  $("sCount").textContent=view.length.toLocaleString();
+  $("sFunded").textContent=money(view.reduce((s,r)=>s+r.funded,0));
+  $("sComm").textContent=money(view.reduce((s,r)=>s+r.comm,0));
+  header(); $("tbody").textContent=""; shown=0;
+  const hasRun = rows.length || $("status").textContent!=="Pick filters and press Run.";
+  $("tbl").style.display=view.length?"":"none";
+  $("empty").style.display=view.length?"none":"";
+  if(!view.length && hasRun){ $("empty").innerHTML = mode==="follow" ? "<b>No follow-ups</b>Nobody's most recent note on an account is from this rep yet." : "<b>No accounts match</b>Try loosening a filter or switching the book."; }
+  renderMore();
+}
+function cell(tr, text, cls){ const td=document.createElement("td"); if(cls) td.className=cls; if(text instanceof Node) td.appendChild(text); else td.textContent=text; tr.appendChild(td); return td; }
+function renderMore(){
+  const tb=$("tbody"), end=Math.min(view.length, shown+300);
+  for(let i=shown;i<end;i++){
+    const r=view[i], tr=document.createElement("tr");
+    cell(tr, r.type);
+    cell(tr, r.oppOwner);
+    const a=document.createElement("div"); a.className="acct";
+    if(/^[a-zA-Z0-9]{15,18}$/.test(r.acctId)){ const lk=document.createElement("a"); lk.href=SF_BASE+"/lightning/r/Account/"+r.acctId+"/view"; lk.target="_blank"; lk.rel="noopener"; lk.textContent=r.account; lk.title="Open account in Salesforce"; a.appendChild(lk); }
+    else a.appendChild(document.createTextNode(r.account));
+    const sm=document.createElement("small"); const bp=document.createElement("span");
+    bp.className="pill "+(r.book==="Book 1"?"b1":r.book==="Book 2"?"b2":"house"); bp.textContent=r.book; sm.appendChild(bp);
+    sm.appendChild(document.createTextNode(" Acct owner: "+r.acctOwner)); a.appendChild(sm);
+    const wt=workingTag(r); if(wt){ a.appendChild(document.createElement("br")); a.appendChild(wt); }
+    a.appendChild(document.createElement("br")); a.appendChild(hitButton(r)); cell(tr,a);
+    const st=document.createElement("div"); const sp=document.createElement("span"); sp.className="pill stage"; sp.textContent=r.stage; st.appendChild(sp);
+    if(r.newer){ const nw=document.createElement("div"); nw.style.marginTop="3px"; const np=document.createElement("span"); np.className="pill newer"; np.textContent="Newer opp"; nw.appendChild(np); st.appendChild(nw); }
+    cell(tr, st);
+    cell(tr, r.lender);
+    cell(tr, money(r.funded), "num");
+    cell(tr, money(r.comm), "num");
+    cell(tr, r.commPct? r.commPct+"%" : "—", "num");
+    const e=document.createElement("div"); e.className="epi"; const bar=document.createElement("span"); bar.className="bar"; const fill=document.createElement("i"); fill.style.width=Math.min(100,Math.max(0,r.epi))+"%"; bar.appendChild(fill); e.appendChild(bar); e.appendChild(document.createTextNode(r.epi.toFixed(1)+"%")); cell(tr,e,"num");
+    const el=document.createElement("div"); const ep=document.createElement("span"); ep.className="pill el-"+r.elig;
+    ep.textContent = r.elig==="green" ? "Eligible" : r.elig==="yellow" ? r.eligGap.toFixed(1)+" pts away" : r.elig==="red" ? r.eligGap.toFixed(1)+" pts away" : "No rule on file";
+    el.appendChild(ep); if(r.eligAt!=null){ const s=document.createElement("span"); s.className="days"; s.textContent="Renews at "+r.eligAt+"%"; el.appendChild(s); } cell(tr, el);
+    if(r.elig!=="none") tr.className="row-"+r.elig;
+    cell(tr, fmtDate(r.close));
+    const nd=document.createElement("div"); nd.textContent=r.noteDate?fmtDate(r.noteDate):"Never";
+    const dd=document.createElement("span"); dd.className="days "+(r.noteDays==null?"cold":r.noteDays<=7?"hot":r.noteDays>30?"cold":"");
+    dd.textContent = r.noteDays==null ? "no note on file" : (r.noteDays+" days ago"+(r.noteBy?" · "+r.noteBy:"")); nd.appendChild(dd); cell(tr, nd);
+    cell(tr, r.note, "note");
+    tr.addEventListener("click", ev=>{ if(ev.target.closest("a")) return; openPeek(r); });
+    tb.appendChild(tr);
+  }
+  shown=end; $("more").style.display = shown<view.length ? "" : "none";
+  $("moreBtn").textContent="Show more ("+(view.length-shown).toLocaleString()+" left)";
+}
+
+// ---------- counts on group headers ----------
+function updateCounts(){
+  document.querySelectorAll("details").forEach(d=>{
+    let n=0; d.querySelectorAll("input,select").forEach(el=>{
+      if(el.disabled || el.id==="f_pifBasis" || el.id==="f_sigAll" || el.id==="lenderSearch" || el.id==="f_lenderMode") return;
+      if(el.type==="checkbox"||el.type==="radio"){ if(el.checked && el.name!=="epiq") n++; }
+      else if(el.tagName==="SELECT"){ if(el.value) n++; }
+      else if(el.value!=="") n++; });
+    if(d.dataset.g==="dec" && window.__mdrAny && !vals($("f_mdr")).length) n++;
+    const c=d.querySelector(".count"); c.textContent=n; c.classList.toggle("show", n>0);
+  });
+}
+
+// ---------- My Lists (saved per person) ----------
+// Stored in this page's database under data/users/<viewer id>/, which only that person can read.
+// Falls back to this browser's storage if the database is not available.
+const LKEY="rph_saved_v1";
+let lists=[], listStore=null, uid=null, activeList="";
+function lsLoad(){ try{ return JSON.parse(localStorage.getItem(LKEY)||"[]"); }catch(e){ return []; } }
+function lsStore(a){ try{ localStorage.setItem(LKEY, JSON.stringify(a)); }catch(e){} }
+function newId(){ return "l"+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function renderLists(){
+  const sel=$("myLists"), keep=activeList; sel.textContent="";
+  const o0=document.createElement("option"); o0.value=""; o0.textContent = lists.length ? "Open a saved list…" : "No saved lists yet"; sel.appendChild(o0);
+  lists.slice().sort((a,b)=>a.name.localeCompare(b.name)).forEach(l=>{ const o=document.createElement("option"); o.value=l.id; o.textContent=l.name; sel.appendChild(o); });
+  sel.value = lists.some(l=>l.id===keep) ? keep : "";
+  activeList = sel.value;
+  $("listActs").style.display = activeList ? "" : "none";
+}
+function listNote(t){ $("listNote").textContent=t||""; }
+async function initLists(){
+  try{
+    const [db,user] = await Promise.all([claude.use("db"), claude.use("user")]);
+    uid = db && user ? await user.id() : null;
+    if(user){ try{ const nm=await user.name(); if(nm){ myName=nm; $("hlNavName").textContent=nm+"’s Hitlist"; } }catch(e){} }
+    if(db && uid){
+      initHits(db, user, uid);
+      listStore = db.collection("data/users/"+uid);
+      let loaded=false; const t=setTimeout(()=>{ if(!loaded) listNote("Your saved lists are taking a while to load…"); },10000);
+      listStore.onSnapshot(snap=>{
+        loaded=true; clearTimeout(t); if($("listNote").textContent.startsWith("Your saved lists are taking")) listNote("");
+        lists = snap.docs.filter(d=>d.exists && d.data().kind==="list").map(d=>({id:d.id, ...d.data()}));
+        renderLists();
+        // move any Hitlist entries from the old fully-private spot to the new one, once
+        const oldHits=snap.docs.filter(d=>d.exists && d.data().kind==="hit");
+        if(oldHits.length && hitStore) migrateOldHits(oldHits);
+      }, ()=>{ clearTimeout(t); listStore=null; lists=lsLoad(); renderLists(); listNote("Lists are saved in this browser only right now."); });
+      // move any lists saved in this browser into the account, once
+      const old=lsLoad();
+      if(old.length){ for(const v of old){ try{ await listStore.doc(newId()).set({kind:"list", name:v.n, state:v.s, book:$("book").value, updatedAt:new Date().toISOString()}); }catch(e){ break; } } lsStore([]); }
+      return;
+    }
+  }catch(e){}
+  lists=lsLoad().map(v=>v.id?v:{id:newId(), name:v.n, state:v.s}); renderLists(); hitsFromLocal();
+}
+async function saveList(id, name, state, book){
+  const body={kind:"list", name, state, book, updatedAt:new Date().toISOString()};
+  if(listStore){ await listStore.doc(id).set(body); }
+  else { const i=lists.findIndex(l=>l.id===id); if(i>=0) lists[i]={id,...body}; else lists.push({id,...body}); lsStore(lists.map(l=>({id:l.id,n:l.name,s:l.state,book:l.book}))); renderLists(); }
+}
+async function deleteList(id){
+  if(listStore){ await listStore.doc(id).delete(); }
+  else { lists=lists.filter(l=>l.id!==id); lsStore(lists.map(l=>({id:l.id,n:l.name,s:l.state,book:l.book}))); renderLists(); }
+}
+function nameTaken(n, exceptId){ return lists.some(l=>l.id!==exceptId && l.name.trim().toLowerCase()===n.trim().toLowerCase()); }
+let saveMode="new";
+function openSave(mode){
+  saveMode=mode; $("saveErr").textContent="";
+  const l=lists.find(x=>x.id===activeList);
+  $("saveTitle").textContent = mode==="rename" ? "Rename list" : "Save as a new list";
+  $("saveHint").style.display = mode==="rename" ? "none" : "";
+  $("saveName").value = mode==="rename" && l ? l.name : "";
+  $("saveModal").classList.add("show"); $("saveName").focus();
+}
+async function confirmSave(){
+  const n=$("saveName").value.trim(); if(!n){ $("saveErr").textContent="Give the list a name."; return; }
+  const l=lists.find(x=>x.id===activeList);
+  if(nameTaken(n, saveMode==="rename"&&l?l.id:null)){ $("saveErr").textContent="You already have a list with that name."; return; }
+  $("saveOk").disabled=true;
+  try{
+    if(saveMode==="rename" && l){ await saveList(l.id, n, l.state, l.book); listNote("Renamed to "+n+"."); }
+    else { const id=newId(); await saveList(id, n, getState(), $("book").value); activeList=id; renderLists(); listNote("Saved “"+n+"”."); }
+    $("saveModal").classList.remove("show");
+  }catch(e){ $("saveErr").textContent = e&&e.code==="quota_exceeded" ? "There's no room for more lists. Delete one you don't use." : "Couldn't save the list. Try again."; }
+  finally{ $("saveOk").disabled=false; }
+}
+function openList(id){
+  const l=lists.find(x=>x.id===id); if(!l) return;
+  activeList=id; clearQuick(); setState(l.state); if(mode!=="prospect"){ mode="prospect"; $("tabProspect").classList.add("on"); $("tabFollow").classList.remove("on"); $("tabHint").textContent=""; }
+  $("myLists").value=id; $("listActs").style.display=""; listNote(""); run();
+}
+
+// ---------- paid in full ----------
+function syncPif(){ const on=$("f_pif").checked; ["f_pifYear","f_pifBasis","f_pifPlus"].forEach(id=>$(id).disabled=!on); }
+(function(){ const sel=$("f_pifYear"), now=new Date().getFullYear(); for(let y=now;y>=2017;y--){ const o=document.createElement("option"); o.value=String(y); o.textContent=String(y); sel.appendChild(o);} })();
+$("f_pif").addEventListener("change", ()=>{ syncPif(); if($("f_pif").checked){ $("f_epiMin").value=""; $("f_epiMax").value=""; document.querySelectorAll("input[name=epiq]").forEach(r=>r.checked=false); } });
+
+// ---------- signals select all ----------
+function syncSigAll(){ const b=[...$("f_signals").querySelectorAll("input")]; const n=b.filter(i=>i.checked).length; $("f_sigAll").checked = n===b.length; $("f_sigAll").indeterminate = n>0 && n<b.length; }
+$("f_sigAll").addEventListener("change", ()=>{ const on=$("f_sigAll").checked; $("f_signals").querySelectorAll("input").forEach(i=>i.checked=on); updateCounts(); });
+$("f_signals").addEventListener("change", syncSigAll);
+
+// ---------- lender list ----------
+function filterLenders(){ const q=$("lenderSearch").value.trim().toLowerCase(); $("f_lenders").querySelectorAll("label").forEach(l=>{ l.style.display = !q || l.textContent.toLowerCase().includes(q) ? "" : "none"; }); }
+function lenderSummary(){ const v=vals($("f_lenders")); $("lenderSel").textContent = v.length ? v.length+" selected: "+v.slice(0,3).join(", ")+(v.length>3?"…":"") : "None selected"; }
+$("lenderSearch").addEventListener("input", e=>{ e.stopPropagation(); filterLenders(); });
+$("f_lenders").addEventListener("change", lenderSummary);
+$("lenderClear").addEventListener("click", e=>{ e.preventDefault(); $("f_lenders").querySelectorAll("input").forEach(i=>i.checked=false); lenderSummary(); clearQuick(); updateCounts(); });
+
+// =====================================================================
+// HITLIST — a private, per-rep follow-up list. Stored only in this page's
+// database under data/users/<viewer id>/ (readable by that person alone).
+// Nothing here writes to Salesforce; Salesforce is only read.
+// =====================================================================
+const HL_STATUSES=["1 - Prospect","2 - Pending Banks","3 - Submitted","4 - Approved","5 - 2nd Call","6 - Pitched","7 - Contracts Out","8 - Funded","9 - Sent Links","10 - Merchant Decline","11 - Funders Decline","12 - DNC"];
+const HL_CONTACT=["Call","Text","Email","SendBlue","TextUs"];
+const HL_MKT=["Marketing email","SendBlue","TextUs","Instantly","Apten","Rebecca Miller","Rachel Duncan","Renewal Bot"];
+const HL_OPENERS=["Joe Mansi","Fariah Alam","Wess Jaten","James Nunnery","Melany Zapata"];
+const HKEY="rph_hits_v1";
+let myName="", hits={}, hitsLive={}, liveAt=null, hlStatusF="", hlDueF=false, hlSortK="followUp", hlSortD=1, view_="hub";
+const dirty=new Set(), saveTimers={}, writeQ={};
+const stNum = s => (s||"").split(" ")[0];
+const todayStr = () => { const d=new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); };
+const clone = o => JSON.parse(JSON.stringify(o));
+function hitsFromLocal(){ try{ hits=JSON.parse(localStorage.getItem(HKEY)||"{}"); }catch(e){ hits={}; } afterHitsChange(); }
+function onHitsSnapshot(docs){
+  const next={};
+  docs.forEach(d=>{ const b=d.data(); if(b && b.acctId) next[b.acctId]=clone(b); });
+  dirty.forEach(id=>{ if(hits[id]) next[id]=hits[id]; });   // keep edits still waiting to save
+  hits=next; afterHitsChange();
+}
+// Hitlists live at hitlists/<rep id>/items/<entry>. Access rules (set on the page):
+//   each rep reads and writes only their own hitlists/<id>/ ; the page owner (manager) can read everyone's.
+let hitStore=null, dbRef=null, userRef=null, metaTimer=null, metaQ=Promise.resolve();
+let hlViewing=null, repHits={}, repUnsub=null, isMgr=false;
+const curHits = () => hlViewing ? repHits : hits;
+const readOnly = () => !!hlViewing;
+function initHits(db, user, id){
+  dbRef=db; userRef=user;
+  hitStore = db.doc("hitlists/"+id).collection("items");
+  hitStore.onSnapshot(snap=>onHitsSnapshot(snap.docs.filter(d=>d.exists)), ()=>{ hitStore=null; hitsFromLocal(); hlBanner("Your Hitlist can't reach its storage right now, so changes are kept in this browser only."); });
+  user.isOwner().then(o=>{ isMgr=!!o; if(isMgr) initManager(); }).catch(()=>{});
+}
+async function migrateOldHits(docs){
+  for(const d of docs){ const b=clone(d.data()); if(!b.acctId) continue;
+    try{ if(!hits[b.acctId]) await hitStore.doc("hit_"+b.acctId).set(b); await listStore.doc(d.id).delete(); }catch(e){ break; } }
+  touchMeta();
+}
+function touchMeta(){
+  if(!hitStore || !dbRef || !uid) return;
+  clearTimeout(metaTimer);
+  metaTimer=setTimeout(()=>{ const body={owner:uid, count:Object.keys(hits).length, updatedAt:new Date().toISOString()};
+    metaQ=metaQ.then(()=>dbRef.doc("hitlists/"+uid).set(body)).catch(()=>{}); },1500);
+}
+function persistHit(acctId){
+  clearTimeout(saveTimers[acctId]);
+  const b=hits[acctId]; if(!b) return Promise.resolve();
+  b.updatedAt=new Date().toISOString();
+  if(!hitStore){ try{ localStorage.setItem(HKEY, JSON.stringify(hits)); }catch(e){} dirty.delete(acctId); return Promise.resolve(); }
+  const id="hit_"+acctId, body=clone(b);
+  const prev=writeQ[id]||Promise.resolve();
+  writeQ[id]=prev.then(()=>hitStore.doc(id).set(body)).then(()=>{ dirty.delete(acctId); flashSaved(); touchMeta(); })
+    .catch(e=>{ hlBanner(e&&e.code==="quota_exceeded" ? "Your Hitlist is full. Remove some prospects to add more." : "Couldn't save your last change. Check your connection and try again."); });
+  return writeQ[id];
+}
+function persistSoon(acctId){ dirty.add(acctId); clearTimeout(saveTimers[acctId]); saveTimers[acctId]=setTimeout(()=>persistHit(acctId),700); }
+function flashSaved(){ const s=$("dSaved"); if(s){ s.textContent="Saved"; clearTimeout(flashSaved.t); flashSaved.t=setTimeout(()=>{ if($("dSaved")) $("dSaved").textContent=""; },1500); } }
+function hlBanner(msg){ const b=$("hlBanner"); b.className=msg?"banner show err":"banner"; b.textContent=msg||""; }
+async function removeHit(acctId){
+  delete hits[acctId]; dirty.delete(acctId); clearTimeout(saveTimers[acctId]);
+  if(hitStore){ const id="hit_"+acctId; const prev=writeQ[id]||Promise.resolve(); writeQ[id]=prev.then(()=>hitStore.doc(id).delete()).then(touchMeta).catch(()=>hlBanner("Couldn't remove that prospect. Try again.")); }
+  else { try{ localStorage.setItem(HKEY, JSON.stringify(hits)); }catch(e){} }
+  afterHitsChange();
+}
+
+// ---- manager view of rep Hitlists (owner only, read-only) ----
+let repMeta=[];
+function initManager(){
+  $("hlWho").style.display="";
+  dbRef.collection("hitlists").onSnapshot(async snap=>{
+    repMeta=snap.docs.filter(d=>d.exists && d.id!==uid).map(d=>({id:d.id, ...d.data()}));
+    await paintRepPicker();
+  }, ()=>{});
+}
+async function paintRepPicker(){
+  const sel=$("hlRep"), keep=sel.value; sel.textContent="";
+  const o0=document.createElement("option"); o0.value=""; o0.textContent="My Hitlist"; sel.appendChild(o0);
+  let ps={}; try{ ps = repMeta.length ? await userRef.profiles(repMeta.map(r=>r.id)) : {}; }catch(e){}
+  repMeta.map(r=>({id:r.id, name:(ps[r.id]&&ps[r.id].name)||"Unnamed rep", count:r.count||0}))
+    .sort((a,b)=>a.name.localeCompare(b.name))
+    .forEach(r=>{ const o=document.createElement("option"); o.value=r.id; o.dataset.name=r.name; o.textContent=r.name+" ("+r.count+")"; sel.appendChild(o); });
+  sel.value = [...sel.options].some(o=>o.value===keep) ? keep : "";
+}
+function viewRep(id){
+  if(repUnsub){ repUnsub(); repUnsub=null; }
+  hlViewing=id||null; repHits={}; hlStatusF=""; hlDueF=false; liveAt=null;
+  $("hlRO").textContent = id ? "Read-only · you're viewing a rep's Hitlist" : "";
+  $("hlAddBox").style.display = id ? "none" : "";
+  if(id){
+    let first=true;
+    repUnsub = dbRef.doc("hitlists/"+id).collection("items").onSnapshot(snap=>{
+      repHits={}; snap.docs.forEach(d=>{ if(d.exists){ const b=clone(d.data()); if(b.acctId) repHits[b.acctId]=b; } });
+      renderHitlist(); if(first){ first=false; if(Object.keys(repHits).length) refreshLive(); }
+    }, ()=>hlBanner("Couldn't load that rep's Hitlist."));
+  } else { renderHitlist(); if(Object.keys(hits).length) refreshLive(); }
+  renderHitlist();
+}
+
+// ---- adding ----
+function hitButton(r){
+  const b=document.createElement("button"); b.className="hlbtn"; b.dataset.acct=r.acctId; paintHitBtn(b);
+  b.addEventListener("click", ev=>{ ev.stopPropagation(); if(!hits[r.acctId]) addToHitlist(r); });
+  return b;
+}
+function paintHitBtn(b){ const on=!!hits[b.dataset.acct]; b.classList.toggle("on",on); b.textContent= on ? "★ On Hitlist" : "+ Hitlist"; b.title = on ? "Already on your Hitlist" : "Add to your private Hitlist (doesn't change Salesforce)"; }
+async function addToHitlist(r){
+  const now=new Date().toISOString();
+  hits[r.acctId]={kind:"hit", acctId:r.acctId, name:r.account, status:"1 - Prospect", opener:"", followUp:"", contact:[], marketing:[], note:"", log:[],
+    merchant:"", phone:"", mobile:"", email:"", addedAt:now, updatedAt:now,
+    snap:{lender:r.lender||"", funded:r.funded||0, epi:r.epi||0, fundedDate:r.fundedDate||"", book:r.book||""}};
+  if(r.stage!==undefined) hitsLive[r.acctId]=r;
+  dirty.add(r.acctId); afterHitsChange();
+  try{
+    if(mcp && (r.latestOppId || r.acctId)){
+      const where = r.latestOppId ? "Id = '"+esc(r.latestOppId)+"'" : "AccountId = '"+esc(r.acctId)+"' AND Is_Most_Recent_Opportunity__c = true";
+      const res=await q("SELECT Phone_Number__c, mobile_phone__c, Email__c, Merchant_First_Name__c, Merchant_Last_Name__c, Account.Phone FROM Opportunity WHERE "+where, 1);
+      const o=res[0]||{}, b=hits[r.acctId];
+      if(b){ b.phone=o.Phone_Number__c||(o.Account&&o.Account.Phone)||""; b.mobile=o.mobile_phone__c||""; b.email=o.Email__c||""; b.merchant=[o.Merchant_First_Name__c,o.Merchant_Last_Name__c].filter(Boolean).join(" "); }
+    }
+  }catch(e){}
+  await persistHit(r.acctId); afterHitsChange();
+}
+
+// ---- add by name (search Salesforce accounts that have a funded deal) ----
+let addT=null;
+$("hlAdd").addEventListener("input", ()=>{
+  clearTimeout(addT); const v=$("hlAdd").value.trim(); const box=$("hlAddRes");
+  if(v.length<2){ box.classList.remove("show"); return; }
+  addT=setTimeout(async()=>{
+    await mcpReady; if(!mcp){ box.textContent="Salesforce isn't connected in this view."; box.classList.add("show"); return; }
+    box.textContent=""; box.appendChild(el("div",null,"Searching…")); box.classList.add("show");
+    try{
+      const accs=await q("SELECT Id, Name, Owner.Name, Owner.Renewal_Book__c FROM Account WHERE Name LIKE '%"+esc(v)+"%' AND Id IN (SELECT AccountId FROM Opportunity WHERE Is_Most_Recent_Funded_Opportunity__c = true) ORDER BY Name", 8);
+      box.textContent="";
+      if(!accs.length){ box.appendChild(el("div",null,"No funded accounts match.")); return; }
+      accs.forEach(a=>{ const d=el("div"); d.appendChild(document.createTextNode(a.Name));
+        const sm=el("small",null,((a.Owner&&a.Owner.Renewal_Book__c)||"—")+" · "+((a.Owner&&a.Owner.Name)||"")+(hits[a.Id]?" · already on your Hitlist":"")); d.appendChild(sm);
+        d.onclick=async()=>{ box.classList.remove("show"); $("hlAdd").value=""; if(hits[a.Id]) return;
+          await addToHitlist({acctId:a.Id, account:a.Name, book:(a.Owner&&a.Owner.Renewal_Book__c)||""}); refreshLive([a.Id]); };
+        box.appendChild(d); });
+    }catch(e){ box.textContent=""; box.appendChild(el("div",null,errMsg(e))); }
+  },350);
+});
+document.addEventListener("click", e=>{ if(!e.target.closest(".addbox")) $("hlAddRes").classList.remove("show"); });
+
+// ---- live Salesforce data for hitlist rows (read-only) ----
+let liveLoading=false;
+async function refreshLive(only){
+  if(!only){ if(liveLoading) return; liveLoading=true; }
+  try{ await refreshLive_(only); } finally{ if(!only) liveLoading=false; }
+}
+async function refreshLive_(only){
+  await mcpReady; if(!mcp){ $("hlStatus").textContent="Salesforce isn't connected in this view."; return; }
+  const ids=(only||Object.keys(curHits())).filter(id=>/^[a-zA-Z0-9]{15,18}$/.test(id)); if(!ids.length) return;
+  $("hlRefresh").disabled=true; $("hlStatus").textContent="Updating from Salesforce…";
+  try{
+    for(let i=0;i<ids.length;i+=150){
+      const chunk=ids.slice(i,i+150);
+      const soql="SELECT Id, Name, Owner.Name, Owner.Renewal_Book__c, (SELECT "+OPP_FIELDS+" FROM Opportunities WHERE Is_Most_Recent_Funded_Opportunity__c = true OR Is_Most_Recent_Opportunity__c = true) FROM Account WHERE Id IN ("+chunk.map(x=>"'"+x+"'").join(",")+")";
+      const accs=await q(soql, 200);
+      accs.forEach(a=>{ hitsLive[a.Id]=shape(a); });
+    }
+    liveAt=new Date(); $("hlStatus").textContent="Salesforce data as of "+liveAt.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
+  }catch(e){ $("hlStatus").textContent=""; hlBanner(errMsg(e)); }
+  finally{ $("hlRefresh").disabled=false; }
+  renderHitlist();
+}
+$("hlRefresh").onclick=()=>refreshLive();
+
+// ---- rendering ----
+function afterHitsChange(){
+  const n=Object.keys(hits).length; $("hlNavCnt").textContent=n;
+  document.querySelectorAll(".hlbtn").forEach(paintHitBtn);
+  if(view_==="hit"){ renderHitlist(); if(!hlViewing && !liveAt && !liveLoading && n) refreshLive(); }
+}
+function dueState(fu){ if(!fu) return ""; const t=todayStr(); return fu<t ? "over" : fu===t ? "today" : ""; }
+const HL_COLS=[{k:"name",l:"Business"},{k:"status",l:"Status"},{k:"followUp",l:"Follow-up"},{k:"note",l:"Note to self"},{k:"contact",l:"Contacted via"},{k:"marketing",l:"Marketing"},{k:"opener",l:"Opener"},{k:"epi",l:"Paid in / Eligibility"},{k:"lender",l:"Lender"},{k:"phone",l:"Phone"},{k:"email",l:"Email"}];
+function renderHitlist(){
+  const all=Object.values(curHits()), t=todayStr(), RO=readOnly();
+  $("hlCount").textContent=all.length;
+  $("hlDueN").textContent=all.filter(h=>h.followUp && h.followUp<=t).length;
+  $("hlFundedN").textContent=all.filter(h=>stNum(h.status)==="8").length;
+  // pills
+  const P=$("hlPills"); P.textContent="";
+  const mk=(label,count,on,cls,fn)=>{ const b=el("button","pill-f"+(cls?" "+cls:"")+(on?" on":"")); b.appendChild(document.createTextNode(label)); const c=el("b",null,String(count)); b.appendChild(c); b.onclick=fn; P.appendChild(b); };
+  mk("All", all.length, !hlStatusF && !hlDueF, "", ()=>{ hlStatusF=""; hlDueF=false; renderHitlist(); });
+  mk("Follow-ups due", all.filter(h=>h.followUp && h.followUp<=t).length, hlDueF, "due", ()=>{ hlDueF=!hlDueF; renderHitlist(); });
+  HL_STATUSES.forEach(s=>{ const c=all.filter(h=>h.status===s).length; if(c||hlStatusF===s) mk(s, c, hlStatusF===s, "", ()=>{ hlStatusF = hlStatusF===s ? "" : s; renderHitlist(); }); });
+  // rows
+  const qv=$("hlQ").value.trim().toLowerCase();
+  let list=all.filter(h=>(!hlStatusF||h.status===hlStatusF) && (!hlDueF||(h.followUp&&h.followUp<=t)) &&
+    (!qv || [h.name,h.note,h.merchant,h.phone,h.email,h.opener,(h.log||[]).map(x=>x.text).join(" ")].join(" ").toLowerCase().includes(qv)));
+  const val=(h,k)=>{ const L=hitsLive[h.acctId];
+    if(k==="followUp") return h.followUp||"9999";
+    if(k==="status") return parseInt(stNum(h.status))||99;
+    if(k==="epi") return L?L.epi:(h.snap&&h.snap.epi)||0;
+    if(k==="lender") return (L?L.lender:(h.snap&&h.snap.lender))||"";
+    if(Array.isArray(h[k])) return h[k].join(",");
+    return (h[k]||"").toString().toLowerCase(); };
+  list.sort((a,b)=>{ const x=val(a,hlSortK), y=val(b,hlSortK); const r = typeof x==="number" ? x-y : String(x).localeCompare(String(y)); return r*hlSortD || a.name.localeCompare(b.name); });
+  // header
+  const hr=$("hlHead"); hr.textContent="";
+  HL_COLS.forEach(c=>{ const th=el("th",null,c.l); if(hlSortK===c.k){ const a=el("span","arr",hlSortD>0?"▲":"▼"); th.appendChild(a); }
+    if(!["note","contact","marketing","phone","email"].includes(c.k)) th.onclick=()=>{ if(hlSortK===c.k) hlSortD*=-1; else { hlSortK=c.k; hlSortD=1; } renderHitlist(); };
+    else th.style.cursor="default"; hr.appendChild(th); });
+  $("hlTbl").style.display=list.length?"":"none"; $("hlEmpty").style.display=list.length?"none":"";
+  if(!list.length && all.length) $("hlEmpty").innerHTML="<b>Nothing matches</b>Clear the search or pick another status.";
+  else if(!all.length) $("hlEmpty").innerHTML="<b>Your Hitlist is empty</b>In the Prospecting Hub, click <b>+ Hitlist</b> on any account, or add a business by name above.";
+  const tb=$("hlBody"); tb.textContent="";
+  list.forEach(h=>{
+    const tr=document.createElement("tr"), L=hitsLive[h.acctId];
+    // business
+    const bz=el("div","acct"); const a=document.createElement("a"); a.href=SF_BASE+"/lightning/r/Account/"+h.acctId+"/view"; a.target="_blank"; a.rel="noopener"; a.textContent=h.name; bz.appendChild(a);
+    if(h.merchant) bz.appendChild(el("small",null,h.merchant));
+    const wt = L ? workingTag(L) : null; if(wt) bz.appendChild(wt);
+    cell(tr,bz);
+    // status (inline)
+    const ss=document.createElement("select"); ss.className="stsel st st-"+stNum(h.status);
+    HL_STATUSES.forEach(s=>{ const o=document.createElement("option"); o.value=s; o.textContent=s; ss.appendChild(o); }); ss.value=h.status;
+    ss.addEventListener("click", e=>e.stopPropagation()); ss.disabled=RO;
+    ss.addEventListener("change", ()=>{ h.status=ss.value; ss.className="stsel st st-"+stNum(h.status); persistSoon(h.acctId); renderHitlist(); });
+    cell(tr,ss);
+    // follow-up (inline)
+    const fu=document.createElement("input"); fu.type="date"; fu.className="fu "+dueState(h.followUp); fu.value=h.followUp||"";
+    fu.addEventListener("click", e=>e.stopPropagation()); fu.disabled=RO;
+    fu.addEventListener("change", ()=>{ h.followUp=fu.value; fu.className="fu "+dueState(h.followUp); persistSoon(h.acctId); $("hlDueN").textContent=Object.values(hits).filter(x=>x.followUp&&x.followUp<=todayStr()).length; });
+    cell(tr,fu);
+    // note
+    const last=(h.log&&h.log[0]); const nt=el("div",null,h.note || (last?last.text:"")); if(!h.note && last){ nt.style.color="var(--muted)"; }
+    cell(tr,nt,"note");
+    const chipsOf=arr=>{ const w=el("div","chips"); (arr||[]).forEach(x=>w.appendChild(el("span","chip2",x))); return w; };
+    cell(tr, chipsOf(h.contact)); cell(tr, chipsOf(h.marketing)); cell(tr, h.opener||"");
+    // eligibility (live if we have it)
+    const ew=el("div"); const epi = L?L.epi:(h.snap&&h.snap.epi)||0; const lender=L?L.lender:(h.snap&&h.snap.lender)||"";
+    const E = L ? L : eligOf(lender, epi);
+    const p=el("span","pill el-"+E.elig, E.elig==="green"?"Eligible":E.elig==="none"?"No rule":E.eligGap.toFixed(1)+" pts away"); ew.appendChild(p);
+    ew.appendChild(el("span","days", epi.toFixed(1)+"% paid in"+(L?"":" · saved "+fmtDate(h.addedAt))));
+    cell(tr, ew);
+    if(E.elig!=="none") tr.className="row-"+E.elig;
+    cell(tr, lender); cell(tr, h.phone||h.mobile||""); cell(tr, h.email||"");
+    tr.addEventListener("click", ev=>{ if(ev.target.closest("a,select,input,button")) return; openHitEditor(h.acctId); });
+    tb.appendChild(tr);
+  });
+}
+$("hlQ").addEventListener("input", renderHitlist);
+$("hlRep").addEventListener("change", ()=>viewRep($("hlRep").value));
+
+// ---- editor drawer ----
+function togGroup(options, selected, onChange){
+  const w=el("div","tog"); options.forEach(o=>{ const b=el("button",selected.includes(o)?"on":null,o); b.type="button";
+    b.onclick=()=>{ const i=selected.indexOf(o); if(i>=0) selected.splice(i,1); else selected.push(o); b.classList.toggle("on"); onChange(); }; w.appendChild(b); }); return w;
+}
+function field(label, input){ const f=el("div","ff"); f.appendChild(el("label",null,label)); f.appendChild(input); return f; }
+function openHitEditor(acctId){
+  const h=curHits()[acctId]; if(!h) return; const L=hitsLive[acctId]; const RO=readOnly();
+  $("dTitle").textContent=""; const a=document.createElement("a"); a.href=SF_BASE+"/lightning/r/Account/"+acctId+"/view"; a.target="_blank"; a.rel="noopener"; a.textContent=h.name; $("dTitle").appendChild(a);
+  $("dSub").textContent = RO ? "On "+((($("hlRep").selectedOptions[0]||{}).dataset||{}).name||"this rep")+"’s Hitlist since "+fmtDate(h.addedAt)+" · read-only" : "On your Hitlist since "+fmtDate(h.addedAt)+" · private to you and your manager";
+  const body=$("dBody"); body.textContent="";
+  const top=el("div","hlhead");
+  const sfb=el("button","btn","Salesforce details"); sfb.onclick=()=>openPeek(L || {acctId, account:h.name, book:(h.snap&&h.snap.book)||"", acctOwner:"", note:"", noteDate:"", noteBy:"", noteDays:null});
+  top.appendChild(sfb); const sv=el("span","saved-ind"); sv.id="dSaved"; top.appendChild(sv); body.appendChild(top);
+  const s1=sec("Tracking");
+  const st=document.createElement("select"); HL_STATUSES.forEach(s=>{ const o=document.createElement("option"); o.value=s; o.textContent=s; st.appendChild(o); }); st.value=h.status;
+  st.onchange=()=>{ h.status=st.value; persistSoon(acctId); renderHitlist(); };
+  const fu=document.createElement("input"); fu.type="date"; fu.value=h.followUp||""; fu.onchange=()=>{ h.followUp=fu.value; persistSoon(acctId); renderHitlist(); };
+  const g=el("div","grid2"); g.appendChild(field("Status", st)); g.appendChild(field("Follow-up date", fu)); s1.appendChild(g);
+  const op=document.createElement("select"); ["",...HL_OPENERS].forEach(s=>{ const o=document.createElement("option"); o.value=s; o.textContent=s||"—"; op.appendChild(o); }); op.value=h.opener||"";
+  op.onchange=()=>{ h.opener=op.value; persistSoon(acctId); renderHitlist(); };
+  s1.appendChild(field("Opener", op));
+  h.contact=h.contact||[]; h.marketing=h.marketing||[];
+  s1.appendChild(field("Contacted via", togGroup(HL_CONTACT, h.contact, ()=>{ persistSoon(acctId); renderHitlist(); })));
+  s1.appendChild(field("Marketing", togGroup(HL_MKT, h.marketing, ()=>{ persistSoon(acctId); renderHitlist(); })));
+  const nt=document.createElement("textarea"); nt.value=h.note||""; nt.placeholder="Your own notes on this prospect. Only you can see these.";
+  nt.oninput=()=>{ h.note=nt.value; persistSoon(acctId); }; nt.onblur=()=>{ persistHit(acctId); renderHitlist(); };
+  s1.appendChild(field("Note to self", nt));
+  body.appendChild(s1);
+  // contact
+  const s2=sec("Contact (your copy)");
+  const mkIn=(k,ph)=>{ const i=document.createElement("input"); i.type="text"; i.value=h[k]||""; i.placeholder=ph; i.oninput=()=>{ h[k]=i.value; persistSoon(acctId); }; i.onblur=()=>{ persistHit(acctId); renderHitlist(); }; return i; };
+  const g2=el("div","grid2"); g2.appendChild(field("Merchant", mkIn("merchant","Name"))); g2.appendChild(field("Phone", mkIn("phone","Phone"))); g2.appendChild(field("Mobile", mkIn("mobile","Mobile"))); g2.appendChild(field("Email", mkIn("email","Email")));
+  s2.appendChild(g2); s2.appendChild(el("div","hint","Copied from Salesforce when added. Editing here doesn't change Salesforce."));
+  body.appendChild(s2);
+  // activity log
+  const s3=sec("Activity log");
+  const la=el("div","logadd"); const li=document.createElement("input"); li.type="text"; li.placeholder="e.g. Sent links, $3,400 Giggle approval"; const lb=el("button","btn","Add");
+  const logBox=el("div");
+  const paintLog=()=>{ logBox.textContent=""; (h.log||[]).forEach((x,i)=>{ const w=el("div","note"); const m=el("div","meta",fmtDate(x.t)+" "+new Date(x.t).toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})); const del=el("button","logx","✕"); del.title="Delete entry"; del.onclick=()=>{ h.log.splice(i,1); persistHit(acctId); paintLog(); renderHitlist(); }; m.appendChild(del); w.appendChild(m); w.appendChild(el("div","tx",x.text)); logBox.appendChild(w); }); if(!(h.log||[]).length) logBox.appendChild(el("div","hint","No entries yet. Each entry is stamped with today's date.")); };
+  const addLog=()=>{ const v=li.value.trim(); if(!v) return; h.log=h.log||[]; h.log.unshift({t:new Date().toISOString(), text:v.slice(0,1000)}); if(h.log.length>200) h.log.length=200; li.value=""; persistHit(acctId); paintLog(); renderHitlist(); };
+  lb.onclick=addLog; li.addEventListener("keydown", e=>{ if(e.key==="Enter") addLog(); });
+  la.appendChild(li); la.appendChild(lb); s3.appendChild(la); s3.appendChild(logBox); paintLog(); body.appendChild(s3);
+  // remove
+  const s4=sec(""); const rm=el("button","dangerlink","Remove from my Hitlist");
+  rm.onclick=()=>{ if(rm.dataset.armed){ removeHit(acctId); closePeek(); } else { rm.dataset.armed="1"; rm.textContent="Click again to remove (this deletes your notes on it)"; setTimeout(()=>{ if(rm.isConnected){ delete rm.dataset.armed; rm.textContent="Remove from my Hitlist"; } },4000); } };
+  s4.appendChild(rm); body.appendChild(s4);
+  if(RO){ body.querySelectorAll("input,select,textarea").forEach(x=>x.disabled=true); body.querySelectorAll(".tog button,.logx").forEach(x=>x.disabled=true); la.style.display="none"; s4.style.display="none"; }
+  $("drawer").classList.add("show"); $("scrim").classList.add("show"); $("drawer").setAttribute("aria-hidden","false");
+}
+
+// ---- switching pages ----
+function showView(v){
+  view_=v;
+  document.querySelector("main").style.display = v==="hub" ? "" : "none";
+  $("hitView").style.display = v==="hit" ? "" : "none";
+  $("closeView").style.display = v==="close" ? "" : "none";
+  $("dashView").style.display = v==="dash" ? "" : "none";
+  document.querySelector(".viewas").style.display = v==="hit" ? "none" : "";
+  $("navDash").classList.toggle("on", v==="dash"); $("navHub").classList.toggle("on", v==="hub"); $("navClose").classList.toggle("on", v==="close"); $("navHit").classList.toggle("on", v==="hit");
+  $("subDash").style.display = v==="dash" ? "" : "none"; $("subHub").style.display = v==="hub" ? "" : "none"; $("subClose").style.display = v==="close" ? "" : "none"; $("subHit").style.display = v==="hit" ? "" : "none";
+  closePeek();
+  try{ const want = v==="hit" ? "#hitlist" : v==="close" ? "#closing" : v==="hub" ? "#prospecting" : ""; if(location.hash!==want){ if(want) location.hash=want.slice(1); else history.replaceState(null,"",location.pathname+location.search); } }catch(e){}
+  if(v==="close") loadClosing(false);
+  if(v==="dash") loadDash(false);
+  if(v==="hit"){ renderHitlist(); if(!liveAt && !liveLoading && Object.keys(curHits()).length) refreshLive(); }
+}
+$("navHub").onclick=()=>showView("hub");
+$("navHit").onclick=()=>showView("hit");
+$("navClose").onclick=()=>showView("close");
+$("navDash").onclick=()=>showView("dash");
+const viewFromHash=()=> location.hash==="#hitlist"?"hit":location.hash==="#closing"?"close":location.hash==="#prospecting"?"hub":"dash";
+window.addEventListener("hashchange", ()=>{ const v=viewFromHash(); if(v!==view_) showView(v); });
+
+// =====================================================================
+// RENEWAL CLOSING HUB — deals a closer/opener is working to close.
+// One query loads every in-flight deal for the person; filters run in the page.
+// =====================================================================
+const CH_STAGES=["Underwriting","Submitted","Resubmit","Sent to Lenders","Offers In","Pre-Approved","Approved","Contracts Out","Contracts In","Sent to Operations"];
+// Stages that roll up under a general stage in the Closing Hub
+const CH_ALIAS={"SLOC Contracts In":"Contracts In","Equipment Contracts In":"Contracts In"};
+let chRows=[], chStageF=new Set(), chSortK="stage", chSortD=1, chLoadedFor=null, chLoading=false;
+const chRank = s => { const i=CH_STAGES.indexOf(s); return i<0?99:i; };
+function chPerson(){ return me(); }
+// Scope helpers: Manager = whole team; Team Lead = only the reps listed in their team.
+const personOf = n => PEOPLE.find(x=>x.n===n);
+const isCloserP = p => p.role==="Closer" || !!p.closer;
+// A team lead's scope is their listed reps plus their own deals.
+const leadTeam = n => { const p=personOf(n); return p && p.role==="Team Lead" ? [...(p.team||[]), p.n] : null; };
+const soqlList = arr => "("+arr.map(x=>"'"+esc(x)+"'").join(",")+")";
+function chIsMgr(){ const p=personOf(chPerson()); return !!p && (p.role==="Manager" || p.role==="Team Lead"); }
+async function loadClosing(force){
+  const who=chPerson(); if(chLoading) return; if(!force && chLoadedFor===who) { renderClosing(); return; }
+  await mcpReady; if(!mcp){ $("chEmpty").innerHTML="<b>Salesforce isn't connected in this view</b>Open the page on claude.ai with MCP Host connected."; return; }
+  chLoading=true; $("chRefresh").disabled=true; $("chStatus").textContent="Loading from Salesforce…"; $("chBanner").className="banner";
+  const team = leadTeam(who);
+  const mine = team
+    ? "(Renewal_Closer__r.Name IN "+soqlList(team)+" OR Renewal_Opener__r.Name IN "+soqlList(team)+" OR Owner.Name IN "+soqlList(team)+")"
+    : chIsMgr()
+    ? "(Renewal_Closer__c != null OR Renewal_Opener__c != null)"
+    : "(Renewal_Closer__r.Name = '"+esc(who)+"' OR Renewal_Opener__r.Name = '"+esc(who)+"' OR Owner.Name = '"+esc(who)+"')";
+  const soql="SELECT Id, AccountId, Account.Name, Account.Owner.Name, Account.Owner.Renewal_Book__c, Type, StageName, Owner.Name, Renewal_Closer__r.Name, Renewal_Opener__r.Name, "+
+    "Approval_Amount__c, Highest_Offer_Issued__c, Highest_Offer_Lender__c, csbs__Amount_Requested__c, csbs__Lender__c, csbs__Commission_Amount__c, "+
+    "Days_Since_Approval__c, Opportunity_current_Stage_Duration__c, csbs__Approved_Date_Time__c, Last_Note_Date__c, Last_Note_Days__c, Last_Note__c, Last_Note_Made_By__r.Name, CreatedDate "+
+    "FROM Opportunity WHERE StageName IN ("+CH_STAGES.concat(Object.keys(CH_ALIAS)).map(s=>"'"+s+"'").join(",")+") AND "+mine+" ORDER BY LastModifiedDate DESC";
+  try{
+    const recs=await q(soql, 2000);
+    chRows=recs.map(o=>({
+      oppId:o.Id, acctId:o.AccountId||"", account:(o.Account&&o.Account.Name)||"", book:(o.Account&&o.Account.Owner&&o.Account.Owner.Renewal_Book__c)||"—", acctOwner:(o.Account&&o.Account.Owner&&o.Account.Owner.Name)||"",
+      type:o.Type||"", stage:CH_ALIAS[o.StageName]||o.StageName||"", rawStage:o.StageName||"", owner:(o.Owner&&o.Owner.Name)||"", closer:(o.Renewal_Closer__r&&o.Renewal_Closer__r.Name)||"", opener:(o.Renewal_Opener__r&&o.Renewal_Opener__r.Name)||"",
+      approved:o.Approval_Amount__c||0, offer:o.Highest_Offer_Issued__c||0, offerLender:o.Highest_Offer_Lender__c||"", requested:o.csbs__Amount_Requested__c||0, lender:o.csbs__Lender__c||"", comm:o.csbs__Commission_Amount__c||0,
+      daysApproved:o.Days_Since_Approval__c, daysStage:o.Opportunity_current_Stage_Duration__c, approvedAt:o.csbs__Approved_Date_Time__c||"",
+      noteDate:o.Last_Note_Date__c||"", noteDays:o.Last_Note_Date__c?(o.Last_Note_Days__c??null):null, note:o.Last_Note__c||"", noteBy:(o.Last_Note_Made_By__r&&o.Last_Note_Made_By__r.Name)||"", created:o.CreatedDate||""
+    }));
+    chLoadedFor=who; $("chStatus").textContent="Updated "+new Date().toLocaleTimeString([], {hour:"numeric",minute:"2-digit"})+(recs.length>=2000?" · showing first 2,000":"");
+    fillPeoplePickers();
+  }catch(e){ $("chStatus").textContent=""; const b=$("chBanner"); b.className="banner show err"; b.textContent=errMsg(e); }
+  finally{ chLoading=false; $("chRefresh").disabled=false; }
+  renderClosing();
+}
+function fillPeoplePickers(){
+  const mgr=chIsMgr();
+  $("chRole").style.display = mgr ? "none" : ""; $("chCloser").style.display = mgr ? "" : "none"; $("chOpener").style.display = mgr ? "" : "none";
+  if(!mgr) return;
+  const fill=(id, key, label)=>{ const s=$(id), keep=s.value; s.textContent=""; const o0=document.createElement("option"); o0.value=""; o0.textContent=label; s.appendChild(o0);
+    const tm=leadTeam(chPerson());
+    [...new Set(chRows.map(r=>r[key]).filter(Boolean))].filter(n=>!tm||tm.includes(n)).sort().forEach(n=>{ const o=document.createElement("option"); o.value=n; o.textContent=n; s.appendChild(o); });
+    s.value=[...s.options].some(o=>o.value===keep)?keep:""; };
+  fill("chCloser","closer","All closers"); fill("chOpener","opener","All openers");
+}
+const CH_COLS=[{k:"account",l:"Account"},{k:"stage",l:"Stage"},{k:"daysStage",l:"Days in stage",n:1},{k:"approved",l:"Approved",n:1},{k:"offer",l:"Highest offer",n:1},{k:"comm",l:"Commission $",n:1},
+  {k:"closer",l:"Closer"},{k:"opener",l:"Opener"},{k:"owner",l:"Opp owner"},{k:"approvedAt",l:"Approved on"},{k:"noteDate",l:"Last note"}];
+function isAging(r){ return r.stage==="Approved" && (r.daysApproved??r.daysStage??0)>=7; }
+function renderClosing(){
+  const who=chPerson(), mgr=chIsMgr(), role=$("chRole").value, cf=$("chCloser").value, of=$("chOpener").value, age=$("chAge").value?Number($("chAge").value):null, qv=$("chQ").value.trim().toLowerCase();
+  const base=chRows.filter(r=>{
+    if(!mgr && role==="closer" && r.closer!==who) return false;
+    if(!mgr && role==="opener" && r.opener!==who) return false;
+    if(!mgr && role==="owner" && r.owner!==who) return false;
+    if(mgr && cf && r.closer!==cf) return false;
+    if(mgr && of && r.opener!==of) return false;
+    if(age!=null && !((r.daysStage??0)>=age)) return false;
+    if(qv && ![r.account,r.lender,r.offerLender,r.note,r.closer,r.opener,r.owner].join(" ").toLowerCase().includes(qv)) return false;
+    return true; });
+  // stage pills (counts reflect the other filters)
+  const P=$("chPills"); P.textContent="";
+  const mk=(label,count,on,fn)=>{ const b=el("button","pill-f"+(on?" on":"")); b.appendChild(document.createTextNode(label)); b.appendChild(el("b",null,String(count))); b.onclick=fn; P.appendChild(b); };
+  mk("All stages", base.length, chStageF.size===0, ()=>{ chStageF.clear(); renderClosing(); });
+  CH_STAGES.forEach(s=>{ const c=base.filter(r=>r.stage===s).length; if(c||chStageF.has(s)) mk(s, c, chStageF.has(s), ()=>{ chStageF.has(s)?chStageF.delete(s):chStageF.add(s); renderClosing(); }); });
+  const agingN=base.filter(isAging).length;
+  const ab=el("button","pill-f due"+(chStageF.has("__aging")?" on":"")); ab.appendChild(document.createTextNode("Aging approvals (7+ days)")); ab.appendChild(el("b",null,String(agingN)));
+  ab.onclick=()=>{ chStageF.has("__aging")?chStageF.delete("__aging"):chStageF.add("__aging"); renderClosing(); }; P.appendChild(ab);
+  const stageSel=[...chStageF].filter(s=>s!=="__aging");
+  let list=base.filter(r=>(!stageSel.length || stageSel.includes(r.stage)) && (!chStageF.has("__aging") || isAging(r)));
+  list.sort((a,b)=>{ let x,y;
+    if(chSortK==="stage"){ x=chRank(a.stage); y=chRank(b.stage); }
+    else if(["daysStage","approved","offer","comm"].includes(chSortK)){ x=a[chSortK]??-1; y=b[chSortK]??-1; }
+    else { x=(a[chSortK]||"").toString().toLowerCase(); y=(b[chSortK]||"").toString().toLowerCase(); }
+    const r = typeof x==="number" ? x-y : x.localeCompare(y); return r*chSortD || (b.approved-a.approved); });
+  $("chCount").textContent=list.length.toLocaleString();
+  $("chApproved").textContent=money(list.reduce((s,r)=>s+(r.approved||0),0));
+  $("chComm").textContent=money(list.reduce((s,r)=>s+(r.comm||0),0));
+  $("chAging").textContent=list.filter(isAging).length;
+  const hr=$("chHead"); hr.textContent="";
+  CH_COLS.forEach(c=>{ const th=el("th",c.n?"num":null,c.l); if(chSortK===c.k) th.appendChild(el("span","arr",chSortD>0?"▲":"▼"));
+    th.onclick=()=>{ if(chSortK===c.k) chSortD*=-1; else { chSortK=c.k; chSortD=c.n?-1:1; } renderClosing(); }; hr.appendChild(th); });
+  $("chTbl").style.display=list.length?"":"none"; $("chEmpty").style.display=list.length?"none":"";
+  if(!list.length && chLoadedFor) $("chEmpty").innerHTML = chRows.length ? "<b>Nothing matches</b>Clear a filter or pick another stage." : "<b>No deals in closing right now</b>Deals show here from Underwriting through Sent to Operations.";
+  const tb=$("chBody"); tb.textContent="";
+  list.forEach(r=>{
+    const tr=document.createElement("tr");
+    const a=el("div","acct");
+    if(/^[a-zA-Z0-9]{15,18}$/.test(r.acctId)){ const lk=document.createElement("a"); lk.href=SF_BASE+"/lightning/r/Account/"+r.acctId+"/view"; lk.target="_blank"; lk.rel="noopener"; lk.textContent=r.account; a.appendChild(lk); } else a.appendChild(document.createTextNode(r.account));
+    const sm=el("small"); const bp=el("span","pill "+(r.book==="Book 1"?"b1":r.book==="Book 2"?"b2":"house"),r.book); sm.appendChild(bp); sm.appendChild(document.createTextNode(" "+r.type)); a.appendChild(sm);
+    cell(tr,a);
+    const st=el("div"); st.appendChild(el("span","pill cs",r.stage)); if(r.rawStage && r.rawStage!==r.stage) st.appendChild(el("span","days",r.rawStage)); if(isAging(r)) st.appendChild(el("span","aging","Aging"));
+    cell(tr,st);
+    cell(tr, r.daysStage==null?"—":Math.round(r.daysStage)+"d", "num");
+    cell(tr, r.approved?money(r.approved):"—", "num");
+    const of=el("div"); of.textContent=r.offer?money(r.offer):"—"; if(r.offerLender) of.appendChild(el("span","days",r.offerLender)); cell(tr, of, "num");
+    cell(tr, r.comm?money(r.comm):"—", "num");
+    cell(tr, r.closer||"—"); cell(tr, r.opener||"—"); cell(tr, r.owner);
+    const ap=el("div"); ap.textContent=r.approvedAt?fmtDate(r.approvedAt):"—"; if(r.approvedAt && r.daysApproved!=null) ap.appendChild(el("span","days",Math.round(r.daysApproved)+" days ago")); cell(tr, ap);
+    const nd=el("div"); nd.textContent=r.noteDate?fmtDate(r.noteDate):"Never"; const dd=el("span","days "+(r.noteDays==null?"cold":r.noteDays<=1?"hot":r.noteDays>3?"cold":""), r.noteDays==null?"no note on file":(r.noteDays+" days ago"+(r.noteBy?" · "+r.noteBy:""))); nd.appendChild(dd);
+    if(r.note){ const nn=el("div","days",r.note.length>90?r.note.slice(0,90)+"…":r.note); nn.style.whiteSpace="normal"; nn.style.maxWidth="320px"; nd.appendChild(nn); }
+    cell(tr, nd);
+    if(isAging(r)) tr.className="row-aging";
+    tr.addEventListener("click", ev=>{ if(ev.target.closest("a,button")) return;
+      openPeek({acctId:r.acctId, account:r.account, book:r.book, acctOwner:r.acctOwner, note:r.note, noteDate:r.noteDate, noteBy:r.noteBy, noteDays:r.noteDays, latestOppId:r.oppId, lender:r.lender, funded:0, epi:0, fundedDate:""}); });
+    tb.appendChild(tr);
+  });
+}
+["chRole","chCloser","chOpener","chAge"].forEach(id=>$(id).addEventListener("change", renderClosing));
+$("chQ").addEventListener("input", renderClosing);
+$("chRefresh").onclick=()=>loadClosing(true);
+
+// =====================================================================
+// DASHBOARD — month-to-date stats, same rules as the Renewal MTD report:
+//   Subs      = Type LIKE '%Renewal%' with Underwriting Date/Time this month
+//   Approvals = of those subs, any with an Approved Date/Time (whenever it happened)
+//   Funded    = Type LIKE '%Renewal%', Stage Funded, Funded Date this month
+//   Closers credited by Renewal Closer, openers by Renewal Opener
+//   Pace      = business days in month ÷ business days elapsed (funded count & commission only)
+// =====================================================================
+let dashFor=null, dashLoading=false, dashData=null;
+function bizDays(y,m){ const days=[]; const d=new Date(y,m,1); while(d.getMonth()===m){ const w=d.getDay(); if(w>0&&w<6) days.push(new Date(d)); d.setDate(d.getDate()+1); } return days; }
+function paceInfo(){
+  const now=new Date(), all=bizDays(now.getFullYear(), now.getMonth());
+  const today=new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const done=all.filter(d=>d<today).length;            // today still counts as in progress
+  const isBiz = all.some(d=>+d===+today);
+  const elapsed = Math.max(1, done + (isBiz ? 0.5 : 0)); // half credit for today
+  return {total:all.length, done, left:all.length-done, factor: all.length/elapsed, dayNum: done + (isBiz?1:0), days:all};
+}
+function personRole(n){ const p=PEOPLE.find(x=>x.n===n); return p ? p.role : "Closer"; }
+const isMgrRole = r => r==="Manager" || r==="Team Lead";
+const pct=(a,b)=> b ? (a/b*100).toFixed(1)+"%" : "—";
+async function loadDash(force){
+  const who=me(); if(dashLoading) return; if(!force && dashFor===who && dashData){ renderDash(); return; }
+  await mcpReady; if(!mcp){ const b=$("dBanner"); b.className="banner show info"; b.textContent="Live Salesforce data isn't available in this view. Open the page on claude.ai with MCP Host connected."; return; }
+  dashLoading=true; $("dRefresh").disabled=true; $("dUpdated").textContent="Loading…"; $("dBanner").className="banner";
+  const role=personRole(who), mgr=isMgrRole(role), team=leadTeam(who);
+  const whoC = team ? "(Renewal_Closer__r.Name IN "+soqlList(team)+" OR Renewal_Opener__r.Name IN "+soqlList(team)+")"
+    : mgr ? "(Renewal_Closer__c != null OR Renewal_Opener__c != null)" : role==="Opener" ? "Renewal_Opener__r.Name = '"+esc(who)+"'" : "Renewal_Closer__r.Name = '"+esc(who)+"'";
+  try{
+    const [subs, funded] = await Promise.all([
+      q("SELECT Id, csbs__Approved_Date_Time__c, Renewal_Closer__r.Name, Renewal_Opener__r.Name FROM Opportunity WHERE Type LIKE '%Renewal%' AND csbs__Underwriting_Date_Time__c = THIS_MONTH AND "+whoC, 2000),
+      q("SELECT Id, AccountId, Account.Name, csbs__Funded__c, csbs__Commission_Amount__c, csbs__Funded_Date__c, csbs__Lender__c, Renewal_Closer__r.Name, Renewal_Opener__r.Name FROM Opportunity WHERE Type LIKE '%Renewal%' AND StageName = 'Funded' AND csbs__Funded_Date__c = THIS_MONTH AND "+whoC+" ORDER BY csbs__Funded_Date__c DESC", 2000)
+    ]);
+    dashData={who, role, subs, funded, at:new Date()}; dashFor=who;
+  }catch(e){ const b=$("dBanner"); b.className="banner show err"; b.textContent=errMsg(e); }
+  finally{ dashLoading=false; $("dRefresh").disabled=false; }
+  renderDash();
+  // pipeline + follow-ups for the "Right now" card
+  if(!mgr || true) loadClosing(false).then(renderNow).catch(()=>{});
+}
+function statsOf(subs, funded){
+  const s=subs.length, a=subs.filter(x=>x.csbs__Approved_Date_Time__c).length, f=funded.length;
+  const fd=funded.reduce((t,x)=>t+(x.csbs__Funded__c||0),0), cm=funded.reduce((t,x)=>t+(x.csbs__Commission_Amount__c||0),0);
+  return {subs:s, appr:a, funded:f, fundedAmt:fd, comm:cm};
+}
+function kpi(label, value, sub, hl){ const k=el("div","kpi"+(hl?" hl":"")); k.appendChild(el("div","l",label)); k.appendChild(el("div","v",value)); if(sub) k.appendChild(el("div","s",sub)); return k; }
+function renderDash(){
+  const P=paceInfo(), now=new Date();
+  $("dMonth").textContent=now.toLocaleDateString("en-US",{month:"long",year:"numeric"});
+  $("dDays").textContent="Business day "+Math.min(P.dayNum,P.total)+" of "+P.total+" · "+P.left+" left including today";
+  $("dBar").style.width=Math.min(100, P.done/P.total*100)+"%";
+  const D=dashData; if(!D) return;
+  const first=D.who.split(" ")[0], mgr=isMgrRole(D.role), team=leadTeam(D.who);
+  $("dHello").textContent = team ? first+"’s team month to date" : mgr ? "Team month to date" : first+"’s month";
+  $("dUpdated").textContent="Updated "+D.at.toLocaleTimeString([], {hour:"numeric",minute:"2-digit"});
+  // team (manager) uses closers only for totals
+  let subs=D.subs, funded=D.funded;
+  if(mgr){ const closers=new Set(PEOPLE.filter(p=>isCloserP(p) && (!team || team.includes(p.n))).map(p=>p.n));
+    subs=subs.filter(x=>x.Renewal_Closer__r && closers.has(x.Renewal_Closer__r.Name));
+    funded=funded.filter(x=>x.Renewal_Closer__r && closers.has(x.Renewal_Closer__r.Name)); }
+  const S=statsOf(subs, funded);
+  const K=$("dKpis"); K.textContent="";
+  K.appendChild(kpi("Subs", S.subs.toLocaleString(), "Pace to "+Math.round(S.subs*P.factor).toLocaleString()+" by month end"));
+  K.appendChild(kpi("Approvals", S.appr.toLocaleString(), pct(S.appr,S.subs)+" offer rate"));
+  K.appendChild(kpi("Funded deals", S.funded.toLocaleString(), pct(S.funded,S.appr)+" close rate · on pace for "+Math.round(S.funded*P.factor)));
+  K.appendChild(kpi("Funded $", money(S.fundedAmt), S.funded?"Avg deal "+money(S.fundedAmt/S.funded):""));
+  K.appendChild(kpi("Commission", money(S.comm), "Projected "+money(S.comm*P.factor)+" by month end", true));
+  K.appendChild(kpi("Avg commission / deal", S.funded?money(S.comm/S.funded):"—", ""));
+  // chart: commission per business day (cumulative line + daily bars)
+  drawDashChart(funded, P);
+  // team table
+  $("dTeamCard").style.display = mgr ? "" : "none";
+  $("dTeamTitle").textContent = team ? first+"’s team month to date" : "Team month to date";
+  if(mgr) renderTeamTable(D, P);
+  // deals
+  $("dDealsTitle").textContent = mgr ? "Funded this month (team)" : "Your funded deals this month";
+  const T=$("dDeals"); T.textContent="";
+  const th=el("thead"), hr=el("tr"); ["Funded","Account","Lender",(mgr||D.role==="Opener")?"Closer":"Opener","Funded $","Commission $"].forEach((x,i)=>hr.appendChild(el("th",i>=4?"num":null,x))); th.appendChild(hr); T.appendChild(th);
+  const tb=el("tbody");
+  funded.slice().sort((a,b)=>(b.csbs__Funded_Date__c||"").localeCompare(a.csbs__Funded_Date__c||"")).forEach(x=>{
+    const tr=el("tr"); tr.appendChild(el("td",null,fmtDate(x.csbs__Funded_Date__c)));
+    const ac=el("td"); if(/^[a-zA-Z0-9]{15,18}$/.test(x.AccountId||"")){ const a=document.createElement("a"); a.href=SF_BASE+"/lightning/r/Account/"+x.AccountId+"/view"; a.target="_blank"; a.rel="noopener"; a.textContent=(x.Account&&x.Account.Name)||""; a.style.color="var(--accent)"; ac.appendChild(a); } else ac.textContent=(x.Account&&x.Account.Name)||""; tr.appendChild(ac);
+    tr.appendChild(el("td",null,x.csbs__Lender__c||""));
+    tr.appendChild(el("td",null, (mgr||D.role==="Opener") ? ((x.Renewal_Closer__r&&x.Renewal_Closer__r.Name)||"—") : ((x.Renewal_Opener__r&&x.Renewal_Opener__r.Name)||"—")));
+    tr.appendChild(el("td","num",money(x.csbs__Funded__c||0))); tr.appendChild(el("td","num",money(x.csbs__Commission_Amount__c||0)));
+    tb.appendChild(tr); });
+  if(!funded.length){ const tr=el("tr"); const td=el("td",null,"No funded deals yet this month. Your first one is on the way."); td.colSpan=6; td.style.color="var(--muted)"; tr.appendChild(td); tb.appendChild(tr); }
+  T.appendChild(tb);
+  renderNow();
+}
+function drawDashChart(funded, P){
+  const box=$("dChart"); box.textContent="";
+  const days=P.days, byDay={}; funded.forEach(x=>{ const d=x.csbs__Funded_Date__c; if(d) byDay[d]=(byDay[d]||0)+(x.csbs__Commission_Amount__c||0); });
+  const key=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+  // weekend fundings roll into the next business day
+  Object.keys(byDay).forEach(k=>{ if(!days.some(d=>key(d)===k)){ const t=days.find(d=>key(d)>k); if(t){ byDay[key(t)]=(byDay[key(t)]||0)+byDay[k]; } delete byDay[k]; } });
+  const vals=days.map(d=>byDay[key(d)]||0), today=new Date(), tk=key(today);
+  let run=0; const cum=vals.map(v=>run+=v);
+  const W=640,H=200,pl=48,pr=12,pt=12,pb=26, n=days.length, bw=(W-pl-pr)/n;
+  const maxBar=Math.max(1,...vals), maxCum=Math.max(1,cum[cum.length-1]);
+  const ns="http://www.w3.org/2000/svg", svg=document.createElementNS(ns,"svg"); svg.setAttribute("viewBox","0 0 "+W+" "+H); svg.setAttribute("width","100%"); svg.style.maxHeight="240px";
+  const mk=(t,a)=>{ const e=document.createElementNS(ns,t); Object.entries(a).forEach(([k,v])=>e.setAttribute(k,v)); svg.appendChild(e); return e; };
+  [0,.5,1].forEach(f=>{ const y=pt+(H-pt-pb)*(1-f); mk("line",{x1:pl,x2:W-pr,y1:y,y2:y,stroke:"#eef1f5"}); const t=mk("text",{x:pl-6,y:y+4,"text-anchor":"end","font-size":"10",fill:"#6b7686"}); t.textContent="$"+Math.round(maxCum*f/1000)+"k"; });
+  days.forEach((d,i)=>{ const x=pl+i*bw, v=vals[i], bh=(H-pt-pb)*(v/maxCum); const future=key(d)>tk;
+    if(v) { const r=mk("rect",{x:x+bw*.18,y:H-pb-bh,width:bw*.64,height:Math.max(1,bh),rx:2,fill:"#9cc3dc"}); const tt=document.createElementNS(ns,"title"); tt.textContent=d.toLocaleDateString("en-US",{month:"short",day:"numeric"})+": "+money(v); r.appendChild(tt); }
+    if(i%2===0||n<=12){ const t=mk("text",{x:x+bw/2,y:H-8,"text-anchor":"middle","font-size":"10",fill: future?"#b8c0cc":"#6b7686"}); t.textContent=String(d.getDate()); } });
+  let path=""; days.forEach((d,i)=>{ if(key(d)>tk) return; const x=pl+i*bw+bw/2, y=pt+(H-pt-pb)*(1-cum[i]/maxCum); path+=(path?"L":"M")+x.toFixed(1)+" "+y.toFixed(1); });
+  if(path) mk("path",{d:path,fill:"none",stroke:"#075677","stroke-width":"2.5","stroke-linejoin":"round"});
+  box.appendChild(svg);
+  $("dChartSub").textContent="Bars = commission funded that day · line = running total ("+money(cum[cum.length-1])+")";
+}
+function renderTeamTable(D, P){
+  const team=leadTeam(D.who);
+  const people=PEOPLE.filter(p=> team ? team.includes(p.n) : p.role!=="Manager"), rows=[];
+  people.forEach(p=>{ const fld = isCloserP(p) ? "Renewal_Closer__r" : "Renewal_Opener__r";
+    const S=statsOf(D.subs.filter(x=>x[fld]&&x[fld].Name===p.n), D.funded.filter(x=>x[fld]&&x[fld].Name===p.n));
+    if(S.subs||S.funded) rows.push({p, S}); });
+  rows.sort((a,b)=>b.S.comm-a.S.comm);
+  const T=$("dTeam"); T.textContent="";
+  const th=el("thead"), hr=el("tr"); ["Renewal Rep","Subs","Appr.","Funded","Funded $","Commission $","Offer Rate","Close Rate","Avg Deal","Proj. Commission"].forEach((x,i)=>hr.appendChild(el("th",i>0?"num":null,x))); th.appendChild(hr); T.appendChild(th);
+  const tb=el("tbody");
+  const line=(name,S,rank,cls)=>{ const tr=el("tr",cls||null); const nc=el("td"); if(rank){ nc.appendChild(el("span","rk",String(rank))); } nc.appendChild(document.createTextNode(name)); tr.appendChild(nc);
+    [S.subs,S.appr,S.funded].forEach(v=>tr.appendChild(el("td","num",String(v))));
+    tr.appendChild(el("td","num",money(S.fundedAmt))); tr.appendChild(el("td","num",money(S.comm)));
+    tr.appendChild(el("td","num",pct(S.appr,S.subs))); tr.appendChild(el("td","num",pct(S.funded,S.appr)));
+    tr.appendChild(el("td","num",S.funded?money(S.fundedAmt/S.funded):"—")); tr.appendChild(el("td","num",money(S.comm*P.factor))); tb.appendChild(tr); };
+  rows.forEach((r,i)=>line(r.p.n, r.S, i+1));
+  const closers=new Set(people.filter(isCloserP).map(p=>p.n));
+  const tot=statsOf(D.subs.filter(x=>x.Renewal_Closer__r&&closers.has(x.Renewal_Closer__r.Name)), D.funded.filter(x=>x.Renewal_Closer__r&&closers.has(x.Renewal_Closer__r.Name)));
+  line("Closer Team Total", tot, null, "tot");
+  T.appendChild(tb);
+}
+function renderNow(){
+  const box=$("dNow"); if(!box) return; box.textContent="";
+  const who=me(), mgr=personRole(who)==="Manager";
+  const mine = chLoadedFor===who ? chRows : [];
+  const appr=mine.filter(r=>r.stage==="Approved"), aging=mine.filter(isAging), co=mine.filter(r=>r.stage==="Contracts Out"||r.stage==="Contracts In");
+  const row=(label, val, sub, go)=>{ const r=el("div","nowrow"); const l=el("div"); l.appendChild(el("div",null,label)); if(sub) l.appendChild(el("div","hint",sub)); r.appendChild(l);
+    const rgt=el("div"); rgt.style.textAlign="right"; rgt.appendChild(el("b",null,val)); if(go){ const b=el("button","lnk","Open →"); b.onclick=go; rgt.appendChild(document.createElement("br")); rgt.appendChild(b); } r.appendChild(rgt); box.appendChild(r); };
+  if(chLoadedFor!==who){ box.appendChild(el("div","hint","Loading your pipeline…")); return; }
+  row("Approved, not yet funded", String(appr.length), money(appr.reduce((t,r)=>t+(r.approved||0),0))+" approved", ()=>{ showView("close"); chStageF.clear(); chStageF.add("Approved"); renderClosing(); });
+  row("Contracts out / in", String(co.length), "", ()=>{ showView("close"); chStageF.clear(); chStageF.add("Contracts Out"); chStageF.add("Contracts In"); renderClosing(); });
+  row("Aging approvals (7+ days)", String(aging.length), aging.length?"Worth a call today":"", aging.length?()=>{ showView("close"); chStageF.clear(); chStageF.add("__aging"); renderClosing(); }:null);
+  if(!mgr || true){ const t=todayStr(); const due=Object.values(hits).filter(x=>x.followUp&&x.followUp<=t).length;
+    row("Hitlist follow-ups due", String(due), "From your Hitlist", ()=>{ showView("hit"); hlDueF=true; hlStatusF=""; renderHitlist(); }); }
+}
+$("dRefresh").onclick=()=>{ loadDash(true); loadClosing(true).then(renderNow).catch(()=>{}); };
+
+// ---------- wire up ----------
+PRESETS.forEach((p,i)=>{ const o=document.createElement("option"); o.value=String(i); o.textContent=p.n; $("presets").appendChild(o); });
+(function(){ const o=document.createElement("option"); o.value="surprise"; o.textContent="Surprise Me"; $("presets").appendChild(o); })();
+function clearQuick(){ $("presets").value=""; $("qsNote").textContent=""; }
+$("presets").addEventListener("change", e=>{
+  e.stopPropagation();
+  let v=$("presets").value; if(v==="") { $("qsNote").textContent=""; return; }
+  if(v==="surprise"){ v=String(Math.floor(Math.random()*PRESETS.length)); $("qsNote").textContent="Surprise pick: "+PRESETS[+v].n; }
+  else $("qsNote").textContent="";
+  setState(PRESETS[+v].s); $("presets").value=v; if(mode!=="prospect"){ mode="prospect"; $("tabProspect").classList.add("on"); $("tabFollow").classList.remove("on"); $("tabHint").textContent=""; } run();
+});
+$("presets").addEventListener("input", e=>e.stopPropagation());
+document.querySelectorAll("input[name=epiq]").forEach(r=>r.onchange=()=>{ const [a,b]=r.value.split(","); $("f_epiMin").value=a; $("f_epiMax").value=b||""; updateCounts(); });
+document.querySelector("aside").addEventListener("input", ()=>{ clearQuick(); if(activeList) listNote("Filters changed. Press Update to save them to this list."); updateCounts(); });
+document.querySelector("aside").addEventListener("change", updateCounts);
+$("f_mdr").addEventListener("change", ()=>{ window.__mdrAny=false; });
+$("run").onclick=()=>{ if(mode!=="prospect"){ mode="prospect"; $("tabProspect").classList.add("on"); $("tabFollow").classList.remove("on"); $("tabHint").textContent=""; } run(); };
+PEOPLE.forEach(p=>{ const o=document.createElement("option"); o.value=p.n; o.textContent=p.n+" · "+(p.role==="Manager"?"Manager (all books)":p.role==="Team Lead"?"Team Lead ("+(p.team||[]).length+" reps)":p.role+(p.book==="ALL"?" (all books)":" ("+p.book+" + House)")); $("viewAs").appendChild(o); });
+$("viewAs").onchange=()=>{ const p=PEOPLE.find(x=>x.n===$("viewAs").value); $("book").value=p?p.book:"ALL"; if(view_==="dash"){ loadDash(true); return; } if(view_==="close"){ $("chRole").value=""; $("chCloser").value=""; $("chOpener").value=""; loadClosing(true); return; } if(mode==="follow") setMode("follow"); else if(rows.length||$("status").textContent!=="Pick filters and press Run.") run(); else applyView(); };
+$("viewAs").value="Mike Santos"; $("book").value="ALL";
+$("tabProspect").onclick=()=>{ if(mode!=="prospect") setMode("prospect"); };
+$("tabFollow").onclick=()=>{ if(mode!=="follow") setMode("follow"); };
+$("dClose").onclick=closePeek; $("scrim").onclick=closePeek;
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") closePeek(); });
+$("reset").onclick=()=>{ setState({}); clearQuick(); };
+$("q").addEventListener("input", applyView);
+$("eligF").addEventListener("change", applyView);
+$("moreBtn").onclick=renderMore;
+$("saveView").onclick=()=>openSave("new");
+$("saveCancel").onclick=()=>$("saveModal").classList.remove("show");
+$("saveOk").onclick=confirmSave;
+$("saveName").addEventListener("keydown", e=>{ if(e.key==="Enter") confirmSave(); if(e.key==="Escape") $("saveModal").classList.remove("show"); });
+$("myLists").addEventListener("change", e=>{ e.stopPropagation(); const v=$("myLists").value; if(v) openList(v); else { activeList=""; $("listActs").style.display="none"; } });
+$("myLists").addEventListener("input", e=>e.stopPropagation());
+$("listRename").onclick=()=>openSave("rename");
+$("listUpdate").onclick=async()=>{ const l=lists.find(x=>x.id===activeList); if(!l) return; try{ await saveList(l.id, l.name, getState(), $("book").value); listNote("Updated “"+l.name+"” with the current filters."); }catch(e){ listNote("Couldn't update the list. Try again."); } };
+$("listDelete").onclick=()=>{ const l=lists.find(x=>x.id===activeList); if(!l) return; $("confirmText").textContent="“"+l.name+"” will be removed from your lists. This can't be undone."; $("confirmModal").classList.add("show"); };
+$("confirmNo").onclick=()=>$("confirmModal").classList.remove("show");
+$("confirmYes").onclick=async()=>{ const id=activeList; $("confirmModal").classList.remove("show"); try{ await deleteList(id); activeList=""; renderLists(); listNote("List deleted."); }catch(e){ listNote("Couldn't delete the list. Try again."); } };
+$("showSoql").onclick=()=>{ $("soqlText").value=buildSoql(buildWhere(getState(), $("book").value)).replace(/ (FROM|WHERE|AND Id IN|ORDER BY)/g,"\n$1"); $("soqlModal").classList.add("show"); };
+$("soqlClose").onclick=()=>$("soqlModal").classList.remove("show");
+$("soqlCopy").onclick=async()=>{ try{ await navigator.clipboard.writeText($("soqlText").value); $("soqlCopy").textContent="Copied"; setTimeout(()=>$("soqlCopy").textContent="Copy",1500);}catch(e){ $("soqlText").select(); } };
+renderLists(); initLists(); updateCounts(); header(); showView(viewFromHash());
+})();
+</script>
+</body>
+</html>

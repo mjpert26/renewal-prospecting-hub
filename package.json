@@ -1,0 +1,11 @@
+{
+  "name": "renewal-prospecting-hub",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Renewal Prospecting Hub hosted on Vercel with direct Salesforce REST API access.",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  }
+}

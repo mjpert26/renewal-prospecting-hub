@@ -1,0 +1,14 @@
+{
+  "mcp": {
+    "servers": [
+      { "server": "MCP Host", "tools": ["sfprod__soql_query"] }
+    ]
+  },
+  "db": {
+    "rules": [
+      { "path": "hitlists", "read": "owner", "write": "owner" },
+      { "path": "hitlists/{self}", "read": "interact", "write": "interact" }
+    ]
+  },
+  "user": { "scopes": ["profile"] }
+}
