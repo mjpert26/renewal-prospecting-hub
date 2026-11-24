@@ -92,6 +92,8 @@ test("theme never overrides eligibility row shading", async () => {
     for (const rule of css.match(/[^{}]*\btr\b[^{}]*\btd\b[^{}]*\{[^}]*background[^}]*\}/g) || []) {
       const sel = rule.slice(0, rule.indexOf("{"));
       if (/tr\.tot/.test(sel)) continue;
+      // Only rules whose target is the table cell itself (e.g. "... tr:hover td"), not something inside it.
+      if (!sel.split(",").some((x) => /\btd(:[\w-]+(\([^)]*\))?)*\s*$/.test(x.trim()))) continue;
       assert.ok(/:not\(\[class\*="row-"\]\)/.test(sel), `${f}: "${sel.trim()}" could paint over eligibility colours`);
     }
   }
